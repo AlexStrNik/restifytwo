@@ -1,0 +1,11 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "restifytwo",
+      "database": "${workspaceFolder:restifytwo}/sql_app.db"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}
