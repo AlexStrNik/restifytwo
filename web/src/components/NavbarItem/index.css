@@ -18,5 +18,5 @@
 }
 
 .NavbarItem:hover {
-  color: white;
+  color: var(--background);
 }

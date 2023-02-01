@@ -6,8 +6,6 @@
   grid-template-areas: "navbar content";
   grid-template-columns: auto 1fr;
   grid-template-rows: 1fr;
-
-  background: white;
 }
 
 .DashboardPage .Navbar {
@@ -17,4 +15,6 @@
 .DashboardPage-Content {
   grid-area: content;
   padding: 40px;
+
+  color: var(--foreground);
 }

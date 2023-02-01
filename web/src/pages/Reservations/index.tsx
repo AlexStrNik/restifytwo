@@ -2,8 +2,8 @@ import "./index.css";
 
 export const Reservations = () => {
   return (
-    <div>
-      <h1 className="Reservations-Header">Reservations</h1>
+    <div className="ReservationsPage">
+      <h1 className="ReservationsPage-Header">Reservations</h1>
     </div>
   );
 };

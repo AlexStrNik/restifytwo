@@ -7,6 +7,7 @@ import {
   toggleNavbar,
 } from "../../models/navbar";
 import { signOut } from "../../models/session";
+import { $theme, toggleTheme } from "../../models/theme";
 
 import { NavbarItem, NavbarItemProps } from "../NavbarItem";
 import { Pane } from "../Pane";
@@ -33,6 +34,8 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({ link, name, icon }) => {
 };
 
 export const Navbar: React.FC = () => {
+  const theme = useStore($theme);
+
   return (
     <Pane className="Navbar">
       <NavbarItem
@@ -41,7 +44,7 @@ export const Navbar: React.FC = () => {
         icon="fa-chess-queen"
         name="restify.two"
       />
-      <div className="Navbar-Links">
+      <div className="Navbar-Group">
         <NavbarLink link="account" icon="fa-user" name="Account" />
         <NavbarLink
           link="reservations"
@@ -50,12 +53,20 @@ export const Navbar: React.FC = () => {
         />
         <NavbarLink link="restaurants" icon="fa-building" name="Restaurants" />
       </div>
-      <NavbarItem
-        className="Navbar-Button Navbar-SignOut"
-        onClick={signOut}
-        icon="fa-circle-xmark"
-        name="Sign out"
-      />
+      <div className="Navbar-Group">
+        <NavbarItem
+          className="Navbar-Button Navbar-Theme"
+          onClick={toggleTheme}
+          icon={theme === "dark" ? "fa-sun" : "fa-moon"}
+          name="Toggle theme"
+        />
+        <NavbarItem
+          className="Navbar-Button Navbar-SignOut"
+          onClick={signOut}
+          icon="fa-circle-xmark"
+          name="Sign out"
+        />
+      </div>
     </Pane>
   );
 };

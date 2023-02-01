@@ -9,7 +9,15 @@
   padding: 40px;
 }
 
-.Navbar-Links {
+.Navbar-Theme {
+  padding: 20px 40px;
+}
+
+.Navbar-SignOut {
+  padding-top: 20px;
+}
+
+.Navbar-Group {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -28,14 +36,15 @@
 .Navbar-Link {
   width: 100%;
   padding-left: 40px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .Navbar-Link .NavbarItem-Label,
-.Navbar-SignOut .NavbarItem-Label {
+.Navbar-SignOut .NavbarItem-Label,
+.Navbar-Theme .NavbarItem-Label {
   font-weight: 400;
 }
 
@@ -44,5 +53,5 @@
 }
 
 .Navbar-Link_selected.Navbar-Link_selected {
-  background: white;
+  background: var(--background);
 }

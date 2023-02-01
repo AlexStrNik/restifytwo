@@ -2,12 +2,12 @@
   width: 100%;
   background: var(--tomato);
 
-  color: var(--eerie-black);
+  color: var(--foreground);
   font-weight: 700;
 
   padding: 10px;
   border-radius: 10px;
-  border: solid var(--eerie-black) 2px;
+  border: solid var(--foreground) 2px;
 
   font-family: "Prompt", sans-serif;
 }

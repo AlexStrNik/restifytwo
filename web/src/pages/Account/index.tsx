@@ -8,8 +8,8 @@ export const Account = () => {
   const name = useStore($user.map((user) => user?.name));
 
   return (
-    <div>
-      <h1 className="Account-Header">Hello, {name}!</h1>
+    <div className="AccountPage">
+      <h1 className="AccountPage-Header">Hello, {name}!</h1>
     </div>
   );
 };

@@ -22,6 +22,10 @@
   filter: blur(10px);
 }
 
+#root[data-theme="dark"] .Pane::after {
+  filter: blur(10px) brightness(0.7);
+}
+
 .Pane > * {
   z-index: 1;
 }
