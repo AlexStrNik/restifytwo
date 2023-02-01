@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@200;400;700&display=swap");
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-height: 100vh;
+
+  font-family: "Prompt", sans-serif;
+}
+
+:root {
+  --cadet-blue: #67a2a1ff;
+  --tomato: #fe6b4eff;
+  --eerie-black: #252627ff;
+  --corn: #fcec52ff;
+}

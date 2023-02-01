@@ -1,0 +1,48 @@
+.Navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.Navbar-Button {
+  padding: 40px;
+}
+
+.Navbar-Links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.Navbar-Header {
+  font-size: 1.1rem;
+}
+
+.Navbar-Header .NavbarItem-Icon {
+  height: 40px;
+}
+
+.Navbar-Link {
+  width: 100%;
+  padding-left: 40px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.Navbar-Link .NavbarItem-Label,
+.Navbar-SignOut .NavbarItem-Label {
+  font-weight: 400;
+}
+
+.Navbar-Link.Navbar-Link:hover {
+  background: var(--cadet-blue);
+}
+
+.Navbar-Link_selected.Navbar-Link_selected {
+  background: white;
+}

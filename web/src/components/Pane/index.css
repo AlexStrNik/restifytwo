@@ -1,0 +1,27 @@
+.Pane {
+  position: relative;
+
+  overflow: hidden;
+
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+.Pane::after {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+
+  content: "";
+  background-image: url(../../public/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right;
+  filter: blur(10px);
+}
+
+.Pane > * {
+  z-index: 1;
+}

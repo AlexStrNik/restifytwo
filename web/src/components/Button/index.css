@@ -1,0 +1,19 @@
+.Button {
+  width: 100%;
+  background: var(--tomato);
+
+  color: var(--eerie-black);
+  font-weight: 700;
+
+  padding: 10px;
+  border-radius: 10px;
+  border: solid var(--eerie-black) 2px;
+
+  font-family: "Prompt", sans-serif;
+}
+
+.Button:focus,
+.Button:hover {
+  outline: none;
+  background-color: var(--cadet-blue);
+}

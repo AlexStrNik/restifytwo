@@ -1,0 +1,15 @@
+.IconButton {
+  background: none;
+  border: none;
+
+  font-size: 30px;
+  line-height: 1rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.IconButton:focus {
+  outline: none;
+}

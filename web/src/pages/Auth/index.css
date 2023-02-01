@@ -1,0 +1,54 @@
+.AuthPage {
+  width: 100%;
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-areas: "decoration pane";
+  grid-template-columns: 1fr 550px;
+  grid-template-rows: 1fr;
+
+  background: white;
+}
+
+.AuthPage-Pane {
+  grid-area: pane;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  color: var(--eerie-black);
+
+  padding: 50px;
+  gap: 30px;
+}
+
+.AuthPage-Header {
+  width: 100%;
+}
+
+.AuthPage-Title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.AuthPage-SignToggle {
+  width: 100%;
+  font-weight: 200;
+  margin: 0;
+}
+
+.AuthPage-Description {
+  font-weight: 200;
+  margin: 0;
+}
+
+.AuthPage-Decoration {
+  grid-area: decoration;
+}
+
+.AuthPage-Decoration::after {
+  background-position: center;
+}
