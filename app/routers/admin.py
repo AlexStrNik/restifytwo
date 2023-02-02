@@ -20,6 +20,7 @@ def restaurants(user: JWTUser = Depends(get_user_from_token), db: Session = Depe
 
 @router.post('/restaurants', response_model=APIRestaurant)
 def add_restaraunt(restaraunt: APIRestaurantCreate, user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
+    sleep(1)
     if not user.is_admin:
         raise HTTPException(403, 'Admin only')
 

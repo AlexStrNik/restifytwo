@@ -8,7 +8,7 @@ interface SetField {
 
 export interface FormStore<T> {
   $store: Store<T>;
-  handleChange: ChangeEventHandler<HTMLInputElement>;
+  handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 export const createFormStore = <T extends object>(): FormStore<T> => {
@@ -22,10 +22,12 @@ export const createFormStore = <T extends object>(): FormStore<T> => {
     })
   );
 
-  const handleChange = setField.prepend((e: ChangeEvent<HTMLInputElement>) => ({
-    key: e.target.name,
-    value: e.target.value,
-  }));
+  const handleChange = setField.prepend(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => ({
+      key: e.target.name,
+      value: e.target.value,
+    })
+  );
 
   return {
     $store,

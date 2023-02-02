@@ -17,3 +17,7 @@
   outline: none;
   background-color: var(--cadet-blue);
 }
+
+.Button:disabled {
+  background-color: var(--background);
+}
