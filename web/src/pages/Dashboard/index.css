@@ -14,7 +14,6 @@
 
 .DashboardPage-Content {
   grid-area: content;
-  padding: 40px;
 
   color: var(--foreground);
 }

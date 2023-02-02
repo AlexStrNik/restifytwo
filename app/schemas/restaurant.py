@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class RestaurantBase(BaseModel):
     name: str
+    about: str
 
 
 class APIRestaurantCreate(RestaurantBase):

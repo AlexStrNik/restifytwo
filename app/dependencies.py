@@ -22,5 +22,5 @@ def get_user_from_token(credentials: HTTPAuthorizationCredentials = Depends(secu
         user = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
         return JWTUser(**user, hashed_password='none')
     except Exception as e:
-        print(e)
+
         raise HTTPException(403, 'Bad authorization')

@@ -1,4 +1,4 @@
-.IconButton {
+.Icon {
   background: none;
   border: none;
 
@@ -10,6 +10,6 @@
   align-items: center;
 }
 
-.IconButton:focus {
+.Icon:focus {
   outline: none;
 }

@@ -1,36 +1,40 @@
 import React from "react";
 import { useStore } from "effector-react";
 
-import { $navbarSelected } from "../../models/navbar";
+import { $route } from "../../models/router";
 
 import { Navbar } from "../../components/Navbar";
 import { Account } from "../Account";
 import { Restaurants } from "../Restaurants";
 import { Reservations } from "../Reservations";
+import { Admin } from "../Admin";
 
 import "./index.css";
 
 export const Dashboard = () => {
-  const selectedPage = useStore($navbarSelected);
-  let Page = Account;
+  const selectedPage = useStore($route);
+  let Page = null;
 
-  switch (selectedPage) {
+  switch (selectedPage.split("/")[1]) {
     case "restaurants":
-      Page = Restaurants;
+      Page = <Restaurants />;
+      break;
+    case "admin":
+      Page = <Admin />;
       break;
     case "reservations":
-      Page = Reservations;
+      Page = <Reservations />;
       break;
     case "account":
     default:
-      Page = Account;
+      Page = <Account />;
       break;
   }
 
   return (
     <div className="DashboardPage">
       <Navbar />
-      <div className="DashboardPage-Content">{React.createElement(Page)}</div>
+      <div className="DashboardPage-Content">{Page}</div>
     </div>
   );
 };

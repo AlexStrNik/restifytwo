@@ -17,3 +17,14 @@ export interface APIUser {
 export interface APIAuth {
   jwt: string;
 }
+
+export interface APIRestaurant {
+  id: number;
+  name: string;
+  about: string;
+}
+
+export interface APIRestaurantCreate {
+  name: string;
+  about: string;
+}

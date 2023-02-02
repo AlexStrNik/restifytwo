@@ -14,7 +14,6 @@ import { signIn, signUp } from "../../models/session";
 import "./index.css";
 
 const form = createFormStore<APIUserRegister | APIUserSign>();
-
 const sumbit = createEvent<boolean>();
 
 sample({

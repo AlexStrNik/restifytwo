@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import auth, restaurants
+from .routers import auth, restaurants, admin
 from .database import Base, engine
 
 app = FastAPI()
@@ -17,5 +17,6 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(restaurants.router)
+app.include_router(admin.router)
 
 Base.metadata.create_all(bind=engine)

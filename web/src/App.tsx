@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useEvent, useStore } from "effector-react";
+import { useStore } from "effector-react";
 
 import { Auth } from "./pages/Auth";
 import { Dashboard } from "./pages/Dashboard";
@@ -10,10 +10,9 @@ import { $session } from "./models/session";
 const $loggedIn = $session.map((session) => session !== null);
 
 function App() {
-  const handlePageMount = useEvent(pageMounted);
   useEffect(() => {
-    handlePageMount();
-  }, [handlePageMount]);
+    pageMounted();
+  }, []);
 
   const loggedIn = useStore($loggedIn);
 

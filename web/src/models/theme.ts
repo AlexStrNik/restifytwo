@@ -6,27 +6,27 @@ export const toggleTheme = createEvent();
 
 export const $theme = createStore<"dark" | "light">("light");
 
-const loadTheme = createEffect(() => {
+const loadThemeFx = createEffect(() => {
   const theme = localStorage.getItem("theme");
 
   return (theme || "light") as "dark" | "light";
 });
 
-const saveTheme = createEffect((theme: string) => {
+const saveThemeFx = createEffect((theme: string) => {
   localStorage.setItem("theme", theme);
 });
 
-const applyTheme = createEffect((theme: string) => {
+const applyThemeFx = createEffect((theme: string) => {
   document.getElementById("root")!.dataset.theme = theme;
 });
 
 sample({
   clock: pageMounted,
-  target: loadTheme,
+  target: loadThemeFx,
 });
 
 sample({
-  clock: loadTheme.doneData,
+  clock: loadThemeFx.doneData,
   target: $theme,
 });
 
@@ -37,5 +37,5 @@ sample({
   target: $theme,
 });
 
-$theme.watch(toggleTheme, saveTheme);
-$theme.watch(applyTheme);
+$theme.watch(toggleTheme, saveThemeFx);
+$theme.watch(applyThemeFx);

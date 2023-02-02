@@ -1,13 +1,11 @@
 import { useStore } from "effector-react";
 import React from "react";
 
-import {
-  $navbarSelected,
-  navbarSelect,
-  toggleNavbar,
-} from "../../models/navbar";
+import { toggleNavbar } from "../../models/navbar";
+import { $route, navigateTo } from "../../models/router";
 import { signOut } from "../../models/session";
 import { $theme, toggleTheme } from "../../models/theme";
+import { $user } from "../../models/user";
 
 import { NavbarItem, NavbarItemProps } from "../NavbarItem";
 import { Pane } from "../Pane";
@@ -20,13 +18,13 @@ interface NavbarLinkProps extends Omit<NavbarItemProps, "onClick"> {
 
 const NavbarLink: React.FC<NavbarLinkProps> = ({ link, name, icon }) => {
   const selected = useStore(
-    $navbarSelected.map((selected) => selected === link)
+    $route.map((selected) => selected.startsWith(link))
   );
 
   return (
     <NavbarItem
       className={`Navbar-Link ${selected ? "Navbar-Link_selected" : ""}`}
-      onClick={() => navbarSelect(link)}
+      onClick={() => navigateTo(link)}
       name={name}
       icon={icon}
     />
@@ -35,6 +33,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({ link, name, icon }) => {
 
 export const Navbar: React.FC = () => {
   const theme = useStore($theme);
+  const user = useStore($user);
 
   return (
     <Pane className="Navbar">
@@ -45,13 +44,16 @@ export const Navbar: React.FC = () => {
         name="restify.two"
       />
       <div className="Navbar-Group">
-        <NavbarLink link="account" icon="fa-user" name="Account" />
+        <NavbarLink link="/account" icon="fa-user" name="Account" />
+        {user?.is_admin && (
+          <NavbarLink link="/admin" icon="fa-id-badge" name="Admin" />
+        )}
         <NavbarLink
-          link="reservations"
+          link="/reservations"
           icon="fa-calendar-check"
           name="Reservations"
         />
-        <NavbarLink link="restaurants" icon="fa-building" name="Restaurants" />
+        <NavbarLink link="/restaurants" icon="fa-building" name="Restaurants" />
       </div>
       <div className="Navbar-Group">
         <NavbarItem
