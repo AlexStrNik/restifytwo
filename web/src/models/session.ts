@@ -4,13 +4,13 @@ import { APIUserSign, APIUserRegister, APIAuth } from "../api/types";
 import { login, regsiter } from "../api/auth";
 import { pageMounted } from "./page";
 
-const signInFx = createEffect(async (data: APIUserSign) => {
+export const signInFx = createEffect(async (data: APIUserSign) => {
   const auth = await login(data);
   localStorage.setItem("session", auth.jwt);
   return auth;
 });
 
-const signUpFx = createEffect(async (data: APIUserRegister) => {
+export const signUpFx = createEffect(async (data: APIUserRegister) => {
   const auth = await regsiter(data);
   localStorage.setItem("session", auth.jwt);
   return auth;

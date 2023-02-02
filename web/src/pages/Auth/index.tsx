@@ -1,6 +1,5 @@
-import { combine, createEvent, createStore, split } from "effector";
+import { createEvent, createStore, merge, sample, split } from "effector";
 import { useStore } from "effector-react";
-import { useCallback, useState } from "react";
 
 import { APIUserRegister, APIUserSign } from "../../api/types";
 
@@ -10,7 +9,7 @@ import { Pane } from "../../components/Pane";
 import { TextButton } from "../../components/TextButton";
 
 import { createFormStore } from "../../models/form";
-import { signIn, signUp } from "../../models/session";
+import { signIn, signInFx, signUp, signUpFx } from "../../models/session";
 
 import "./index.css";
 
@@ -19,6 +18,11 @@ const toggleSignUp = createEvent();
 
 const form = createFormStore<APIUserRegister | APIUserSign>();
 const $isSignUp = createStore(false).on(toggleSignUp, (s) => !s);
+
+sample({
+  clock: merge([signInFx.done, signUpFx.done]),
+  target: form.clear,
+});
 
 split({
   clock: sumbit,

@@ -33,6 +33,11 @@ sample({
   target: navigateTo,
 });
 
+sample({
+  clock: createRestaurantFx.done,
+  target: newRestaurantForm.clear,
+});
+
 export const NewRestaurant = () => {
   const loading = useStore(createRestaurantFx.pending);
 
