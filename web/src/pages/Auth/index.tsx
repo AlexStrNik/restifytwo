@@ -1,4 +1,5 @@
-import { createEvent, sample, Store } from "effector";
+import { combine, createEvent, createStore, split } from "effector";
+import { useStore } from "effector-react";
 import { useCallback, useState } from "react";
 
 import { APIUserRegister, APIUserSign } from "../../api/types";
@@ -13,28 +14,26 @@ import { signIn, signUp } from "../../models/session";
 
 import "./index.css";
 
+const sumbit = createEvent();
+const toggleSignUp = createEvent();
+
 const form = createFormStore<APIUserRegister | APIUserSign>();
-const sumbit = createEvent<boolean>();
+const $isSignUp = createStore(false).on(toggleSignUp, (s) => !s);
 
-sample({
+split({
   clock: sumbit,
-  source: form.$store as Store<APIUserRegister>,
-  filter: (_, isSignUp) => isSignUp,
-  target: signUp,
-});
-
-sample({
-  clock: sumbit,
-  source: form.$store as Store<APIUserSign>,
-  filter: (_, isSignUp) => !isSignUp,
-  target: signIn,
+  source: form.$store,
+  match: {
+    signUp: $isSignUp,
+  },
+  cases: {
+    signUp,
+    __: signIn,
+  },
 });
 
 export const Auth = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const toggleSignUp = useCallback(() => {
-    setIsSignUp((prev) => !prev);
-  }, []);
+  const isSignUp = useStore($isSignUp);
 
   return (
     <div className="AuthPage">
@@ -65,9 +64,7 @@ export const Auth = () => {
           placeholder="Password"
           label="Password"
         ></Input>
-        <Button onClick={() => sumbit(isSignUp)}>
-          {isSignUp ? "Sign up" : "Sign in"}
-        </Button>
+        <Button onClick={sumbit}>{isSignUp ? "Sign up" : "Sign in"}</Button>
         <p className="AuthPage-SignToggle">
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
           <TextButton onClick={toggleSignUp}>
