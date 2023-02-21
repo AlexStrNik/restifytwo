@@ -8,7 +8,9 @@ interface SetField {
 
 export interface FormStore<T> {
   $store: Store<T>;
-  handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >;
   clear: Event<void>;
 }
 

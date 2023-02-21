@@ -13,6 +13,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     name = Column(String)
     hashed_password = Column(String)
+    archilogic_token = Column(String)
     is_admin = Column(Boolean, default=False)
 
     reservations = relationship('Reservation', back_populates='guest')

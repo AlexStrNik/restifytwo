@@ -5,6 +5,7 @@ from pydantic import BaseModel
 class RestaurantBase(BaseModel):
     name: str
     about: str
+    floor_id: str
 
 
 class APIRestaurantCreate(RestaurantBase):

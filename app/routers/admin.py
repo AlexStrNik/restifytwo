@@ -24,5 +24,5 @@ def add_restaraunt(restaraunt: APIRestaurantCreate, user: JWTUser = Depends(get_
     if not user.is_admin:
         raise HTTPException(403, 'Admin only')
 
-    restaraunt = RestaurantCreate(name=restaraunt.name, about=restaraunt.about, owner_id=user.id)
+    restaraunt = RestaurantCreate(name=restaraunt.name, about=restaraunt.about, floor_id=restaraunt.floor_id, owner_id=user.id)
     return create_restaurant(db, restaraunt)

@@ -10,6 +10,7 @@ class Restaurant(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     about = Column(String)
+    floor_id = Column(String)
     owner_id = Column(Integer, ForeignKey('users.id'))
 
     owner = relationship('User', back_populates='owned_restaurants')

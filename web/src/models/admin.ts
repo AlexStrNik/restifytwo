@@ -15,6 +15,7 @@ const _loadRestaurantsFx = createEffect(restaurants);
 export const loadRestaurantsFx = attach({
   source: $session,
   effect: _loadRestaurantsFx,
+  mapParams: (_, session) => session as string,
 });
 
 export const createRestaurant = createEvent<APIRestaurantCreate>();
@@ -32,7 +33,6 @@ export const createRestaurantFx = attach({
 });
 
 export const $myRestaurants = createStore<APIRestaurant[]>([]);
-export const $selectedRestaurant = createStore(null);
 
 sample({
   clock: loadRestaurants,

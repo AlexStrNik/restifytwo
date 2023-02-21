@@ -12,6 +12,7 @@ export interface APIUser {
   email: string;
   name: string;
   is_admin: boolean;
+  archilogic_token: string;
 }
 
 export interface APIAuth {
@@ -27,4 +28,12 @@ export interface APIRestaurant {
 export interface APIRestaurantCreate {
   name: string;
   about: string;
+  floor_id: string;
+}
+
+export interface APIUserUpdate extends Partial<APIUser> {}
+
+export interface APIFloor {
+  id: string;
+  name: string;
 }

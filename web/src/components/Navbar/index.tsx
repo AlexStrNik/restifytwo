@@ -48,12 +48,12 @@ export const Navbar: React.FC = () => {
         {user?.is_admin && (
           <NavbarLink link="/admin" icon="fa-id-badge" name="Admin" />
         )}
+        <NavbarLink link="/restaurants" icon="fa-building" name="Restaurants" />
         <NavbarLink
           link="/reservations"
           icon="fa-calendar-check"
           name="Reservations"
         />
-        <NavbarLink link="/restaurants" icon="fa-building" name="Restaurants" />
       </div>
       <div className="Navbar-Group">
         <NavbarItem

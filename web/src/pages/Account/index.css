@@ -1,3 +1,12 @@
+.AccountPage {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 40px;
+
+  padding: 40px;
+}
+
 .AccountPage-Header {
   font-weight: 700;
   margin: 0;

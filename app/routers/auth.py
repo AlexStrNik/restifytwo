@@ -1,12 +1,13 @@
 import jwt
 import bcrypt
+from time import sleep
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..dependencies import get_db, get_user_from_token
 from ..schemas.auth import APIAuth, JWTUser
-from ..schemas.user import APIUser, APIUserSign, APIUserRegister
-from ..crud.users import get_user, create_user
+from ..schemas.user import APIUser, APIUserSign, APIUserRegister, APIUserUpdate
+from ..crud.users import get_user, create_user, update_user
 from ..constants import JWT_SECRET
 
 router = APIRouter(prefix='/api/auth')
@@ -39,3 +40,9 @@ def register(creds: APIUserRegister, db: Session = Depends(get_db)):
 def me(user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
 
     return get_user(db, by_id=user.id)
+
+@router.post('/me', response_model=APIUser)
+def me(data: APIUserUpdate, user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
+    sleep(1)
+    
+    return update_user(db, id=user.id, data=data)

@@ -22,7 +22,7 @@ export const Admin = () => {
   }, []);
 
   const selectedSubPage = useStore(
-    $route.map((route) => route.replace("/admin/", ""))
+    $route.map((route) => route.replace("/admin", ""))
   );
 
   const restaurantsLoading = useStore(loadRestaurantsFx.pending);
@@ -33,7 +33,7 @@ export const Admin = () => {
   return (
     <div className="AdminPage">
       <div className="AdminPage-List">
-        <h1 className="AdminPage-Header">My restaurants</h1>
+        <h1 className="AdminPage-Header">Admin page</h1>
         <div className="AdminPage-Restaurants">
           {restaurantsLoading ? (
             [...Array(10).keys()].map((i) => (
@@ -52,7 +52,7 @@ export const Admin = () => {
           )}
         </div>
       </div>
-      {selectedSubPage === "new" ? <NewRestaurant /> : null}
+      {selectedSubPage === "/new" ? <NewRestaurant /> : null}
     </div>
   );
 };

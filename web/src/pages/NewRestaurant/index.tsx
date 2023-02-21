@@ -1,18 +1,16 @@
 import { createEvent, sample } from "effector";
 import { useStore } from "effector-react";
+import { useEffect } from "react";
 import { APIRestaurantCreate } from "../../api/types";
 
 import { Button } from "../../components/Button";
-import { Icon } from "../../components/Icon";
 import { Input } from "../../components/Input";
+import { Select } from "../../components/Select";
 import { SideForm } from "../../components/SideForm";
 import { Textarea } from "../../components/Textarea";
 
-import {
-  createRestaurant,
-  createRestaurantFx,
-  loadRestaurantsFx,
-} from "../../models/admin";
+import { createRestaurant, createRestaurantFx } from "../../models/admin";
+import { $myFloors, loadFloors } from "../../models/archilogic";
 import { createFormStore } from "../../models/form";
 import { navigateTo } from "../../models/router";
 
@@ -39,7 +37,12 @@ sample({
 });
 
 export const NewRestaurant = () => {
+  useEffect(() => {
+    loadFloors();
+  }, []);
+
   const loading = useStore(createRestaurantFx.pending);
+  const floors = useStore($myFloors);
 
   return (
     <SideForm
@@ -53,6 +56,16 @@ export const NewRestaurant = () => {
         placeholder="Enter restaurant name"
         label="Name"
       ></Input>
+      <Select
+        form={newRestaurantForm}
+        name="floor_id"
+        placeholder="Select floor plan"
+        label="Floor plan"
+        options={floors.map((f) => ({
+          label: f.name,
+          value: f.id,
+        }))}
+      ></Select>
       <Textarea
         form={newRestaurantForm}
         name="about"
@@ -64,10 +77,8 @@ export const NewRestaurant = () => {
         className="NewRestaurant-Submit"
         disabled={loading}
         onClick={restaurantSubmit}
+        loading={loading}
       >
-        {loading && (
-          <Icon className="NewRestaurant-Loader" icon="fa-hourglass-half" />
-        )}{" "}
         Create restaurant
       </Button>
     </SideForm>

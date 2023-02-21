@@ -1,4 +1,10 @@
 .Button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
   width: 100%;
   background: var(--tomato);
 
@@ -20,4 +26,29 @@
 
 .Button:disabled {
   background-color: var(--background);
+}
+
+.Button-Loader {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  animation: loading 2s linear infinite;
+}
+
+@keyframes clock-loading {
+  0% {
+    transform: rotate(0);
+  }
+  10% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  60% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

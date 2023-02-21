@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 from .reservation import Reservation
@@ -25,11 +25,21 @@ class APIUser(UserBase):
     id: str
     name: str
     is_admin: bool
+    archilogic_token: Optional[str]
     reservations: List[Reservation] = []
     owned_restaurants: List[Restaurant] = []
 
     class Config:
         orm_mode = True
+
+
+class APIUserUpdate(BaseModel):
+    name: Optional[str]
+    archilogic_token: Optional[str]
+
+
+class UserUpdate(APIUserUpdate):
+    pass
 
 
 class User(APIUser):
