@@ -1,5 +1,6 @@
+import React, { ChangeEvent, ComponentType } from "react";
 import { createEvent, createStore, Store, Event } from "effector";
-import { ChangeEvent, ChangeEventHandler } from "react";
+import { useStoreMap } from "effector-react";
 
 interface SetField {
   key: string;
@@ -8,10 +9,10 @@ interface SetField {
 
 export interface FormStore<T> {
   $store: Store<T>;
-  handleChange: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  >;
   clear: Event<void>;
+  controlled: <P extends {}>(
+    component: ComponentType<P>
+  ) => React.FC<P & { name: string }>;
 }
 
 export const createFormStore = <T extends object>(): FormStore<T> => {
@@ -25,16 +26,27 @@ export const createFormStore = <T extends object>(): FormStore<T> => {
     }))
     .on(clear, () => ({} as T));
 
-  const handleChange = setField.prepend(
-    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => ({
-      key: e.target.name,
-      value: e.target.value,
-    })
-  );
+  const controlled = <P extends {}>(component: ComponentType<P>) => {
+    return (props: P & { name: string }) => {
+      const value = useStoreMap({
+        store: $store as unknown as Store<{ [key: string]: string }>,
+        keys: [props.name],
+        fn: (values) => values[props.name] || "",
+      });
+
+      return React.createElement(component, {
+        ...props,
+        value,
+        onChange: (event: ChangeEvent<HTMLInputElement>) => {
+          setField({ key: props.name, value: event.currentTarget.value });
+        },
+      });
+    };
+  };
 
   return {
     $store,
-    handleChange,
     clear,
+    controlled,
   };
 };

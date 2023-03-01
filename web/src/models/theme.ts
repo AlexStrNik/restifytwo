@@ -1,24 +1,39 @@
-import { createEffect, createEvent, createStore, sample } from "effector";
+import { DefaultMantineColor } from "@mantine/core";
+import {
+  createEffect,
+  createEvent,
+  createStore,
+  restore,
+  sample,
+} from "effector";
 
 import { pageMounted } from "./page";
 
-export const toggleTheme = createEvent();
+interface Theme {
+  colorScheme: "dark" | "light";
+  primaryColor: DefaultMantineColor;
+}
 
-export const $theme = createStore<"dark" | "light">("light");
+const DEFAULT_THEME: Theme = {
+  colorScheme: "light",
+  primaryColor: "blue",
+};
+
+export const toggleColorScheme = createEvent();
+
+export const setPrimaryColor = createEvent<DefaultMantineColor>();
 
 const loadThemeFx = createEffect(() => {
   const theme = localStorage.getItem("theme");
 
-  return (theme || "light") as "dark" | "light";
+  return theme ? JSON.parse(theme) : DEFAULT_THEME;
 });
 
-const saveThemeFx = createEffect((theme: string) => {
-  localStorage.setItem("theme", theme);
+const saveThemeFx = createEffect((theme: Theme) => {
+  localStorage.setItem("theme", JSON.stringify(theme));
 });
 
-const applyThemeFx = createEffect((theme: string) => {
-  document.getElementById("root")!.dataset.theme = theme;
-});
+export const $theme = createStore<Theme>(DEFAULT_THEME);
 
 sample({
   clock: pageMounted,
@@ -31,11 +46,25 @@ sample({
 });
 
 sample({
-  clock: toggleTheme,
-  fn: (theme) => (theme === "light" ? "dark" : "light"),
+  clock: toggleColorScheme,
+  fn: (theme) =>
+    ({
+      primaryColor: theme.primaryColor,
+      colorScheme: theme.colorScheme === "dark" ? "light" : "dark",
+    } as Theme),
   source: $theme,
   target: $theme,
 });
 
-$theme.watch(toggleTheme, saveThemeFx);
-$theme.watch(applyThemeFx);
+sample({
+  clock: setPrimaryColor,
+  fn: (theme, color) => ({
+    colorScheme: theme.colorScheme,
+    primaryColor: color,
+  }),
+  source: $theme,
+  target: $theme,
+});
+
+$theme.watch(setPrimaryColor, saveThemeFx);
+$theme.watch(toggleColorScheme, saveThemeFx);

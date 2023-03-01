@@ -12,7 +12,8 @@ export interface APIUser {
   email: string;
   name: string;
   is_admin: boolean;
-  archilogic_token: string;
+  archilogic_secret_token: string;
+  archilogic_public_token: string;
 }
 
 export interface APIAuth {

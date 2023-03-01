@@ -25,7 +25,8 @@ class APIUser(UserBase):
     id: str
     name: str
     is_admin: bool
-    archilogic_token: Optional[str]
+    archilogic_secret_token: Optional[str]
+    archilogic_public_token: Optional[str]
     reservations: List[Reservation] = []
     owned_restaurants: List[Restaurant] = []
 
@@ -35,7 +36,8 @@ class APIUser(UserBase):
 
 class APIUserUpdate(BaseModel):
     name: Optional[str]
-    archilogic_token: Optional[str]
+    archilogic_secret_token: Optional[str]
+    archilogic_public_token: Optional[str]
 
 
 class UserUpdate(APIUserUpdate):

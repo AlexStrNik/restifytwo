@@ -7,30 +7,4 @@ body,
   padding: 0;
   border: none;
   min-height: 100vh;
-
-  font-family: "Prompt", sans-serif;
-}
-
-:root {
-  --cadet-blue: #67a2a1;
-  --tomato: #fe6b4e;
-  --eerie-black: #252627;
-}
-
-#root {
-  --foreground: var(--eerie-black);
-  --foreground-rgb: 37, 38, 39;
-
-  --background: white;
-  --background-rgb: 255, 255, 255;
-
-  background-color: var(--background);
-}
-
-#root[data-theme="dark"] {
-  --foreground: white;
-  --foreground-rgb: 255, 255, 255;
-
-  --background-rgb: 37, 38, 39;
-  --background: var(--eerie-black);
 }
