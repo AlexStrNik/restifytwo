@@ -5,6 +5,7 @@ import { routes } from "../shared/routes";
 import RestaurantsPage from "./RestaurantsPage";
 import AccountPage from "./AccountPage";
 import PreferencesPage from "./PreferencesPage";
+import BookingPage from "./BookingPage";
 
 export const pagesMap = [
   { path: "/", route: routes.restaurants.list },
@@ -18,7 +19,7 @@ export const pagesMap = [
 ];
 
 export const Pages = createRoutesView({
-  routes: [AccountPage, RestaurantsPage, PreferencesPage],
+  routes: [AccountPage, RestaurantsPage, PreferencesPage, BookingPage],
   otherwise() {
     return (
       <Center style={{ height: "100vh" }}>

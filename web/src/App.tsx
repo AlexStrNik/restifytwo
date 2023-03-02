@@ -1,10 +1,6 @@
 import { ComponentType, useEffect } from "react";
 import { useStore } from "effector-react";
-import {
-  AppShell,
-  MantineProvider,
-  TypographyStylesProvider,
-} from "@mantine/core";
+import { AppShell, MantineProvider } from "@mantine/core";
 import { createHistoryRouter } from "atomic-router";
 import { createBrowserHistory } from "history";
 import { RouterProvider } from "atomic-router-react";
@@ -41,6 +37,7 @@ const App = () => {
             theme.colorScheme === "dark"
               ? theme.colors.dark[8]
               : theme.colors.gray[0],
+          color: theme.colorScheme === "dark" ? theme.white : theme.black,
         },
       })}
     >
@@ -63,9 +60,7 @@ const withProviders = <P extends {}>(App: ComponentType<P>) => {
             loader: "dots",
           }}
         >
-          <TypographyStylesProvider>
-            <App {...props} />
-          </TypographyStylesProvider>
+          <App {...props} />
         </MantineProvider>
       </RouterProvider>
     );

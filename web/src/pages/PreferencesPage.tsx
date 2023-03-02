@@ -11,9 +11,7 @@ const PreferencesPage = () => {
   return (
     <>
       <Stack p="lg" maw={700} pos="relative">
-        <Title style={{ marginTop: 0 }} order={1}>
-          Preferences
-        </Title>
+        <Title order={1}>Preferences</Title>
         <ColorControl
           label="Primary color"
           value={theme.primaryColor}

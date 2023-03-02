@@ -43,9 +43,7 @@ const AccountPage = () => {
     <>
       <Stack p="lg" maw={700} pos="relative">
         <LoadingOverlay visible={loading} overlayBlur={2} />
-        <Title style={{ marginTop: 0 }} order={1}>
-          Account settings
-        </Title>
+        <Title order={1}>Account settings</Title>
         <TextInput name="name" placeholder="User name" label="Name"></TextInput>
 
         {user?.is_admin && (

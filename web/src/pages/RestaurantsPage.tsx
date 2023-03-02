@@ -1,23 +1,26 @@
 import { chainRoute } from "atomic-router";
 import { useList } from "effector-react";
 import {
-  Badge,
   Button,
   Card,
   Group,
   Image,
+  Rating,
   SimpleGrid,
-  Space,
   Stack,
   Text,
   Title,
+  useMantineTheme,
 } from "@mantine/core";
 
 import { $restaurants, loadRestaurantsFx } from "../models/restaurants";
 import { APIRestaurant } from "../api/types";
 import { routes } from "../shared/routes";
+import { Link } from "atomic-router-react";
 
 const RestaurantsPage = () => {
+  const theme = useMantineTheme();
+
   const restaurants = useList($restaurants, (restaurant: APIRestaurant) => (
     <Card
       shadow="sm"
@@ -37,23 +40,32 @@ const RestaurantsPage = () => {
 
       <Group position="apart" mt="md" mb="xs">
         <Text weight={500}>{restaurant.name}</Text>
-        <Badge variant="light">New</Badge>
+        <Rating
+          color={theme.primaryColor}
+          defaultValue={3.45}
+          readOnly
+          fractions={2}
+        />
       </Group>
 
       <Text style={{ flexGrow: 1 }} size="sm" color="dimmed" lineClamp={4}>
         {restaurant.about}
       </Text>
 
-      <Button variant="light" fullWidth mt="md" radius="md">
-        Book now
-      </Button>
+      <Link
+        to={routes.restaurants.single}
+        params={{ restaurantId: restaurant.id }}
+        style={{ display: "contents" }}
+      >
+        <Button variant="light" fullWidth mt="md" radius="md">
+          Book now
+        </Button>
+      </Link>
     </Card>
   ));
   return (
     <Stack p="lg">
-      <Title style={{ marginTop: 0 }} order={1}>
-        Restaurants
-      </Title>
+      <Title order={1}>Restaurants</Title>
       <SimpleGrid
         cols={3}
         spacing="lg"

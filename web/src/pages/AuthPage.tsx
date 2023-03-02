@@ -78,7 +78,9 @@ const AuthPage = () => {
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
-        <Title order={1}>Welcome back!</Title>
+        <Title mb={50} order={1}>
+          Welcome back!
+        </Title>
 
         {isSignUp && (
           <TextInput

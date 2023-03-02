@@ -42,7 +42,7 @@ const Navbar = () => {
     <Link
       key={navItem.label}
       to={navItem.route}
-      style={{ textDecoration: "none", display: "contents" }}
+      style={{ display: "contents" }}
     >
       <NavbarLink {...navItem} active={activeRoutes.includes(navItem.route)} />
     </Link>
