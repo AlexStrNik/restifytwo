@@ -64,7 +64,7 @@ const RestaurantsPage = () => {
     </Card>
   ));
   return (
-    <Stack p="lg">
+    <Stack p="xl">
       <Title order={1}>Restaurants</Title>
       <SimpleGrid
         cols={3}

@@ -6,6 +6,7 @@ class RestaurantBase(BaseModel):
     name: str
     about: str
     floor_id: str
+    archilogic_token: str
 
 
 class APIRestaurantCreate(RestaurantBase):

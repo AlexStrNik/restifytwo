@@ -4,33 +4,74 @@ import {
   Anchor,
   createStyles,
   Paper,
-  PasswordInput as PasswordInput_,
-  TextInput as TextInput_,
+  PasswordInput,
+  TextInput,
   Title,
   Text,
   Button,
 } from "@mantine/core";
+import { createForm, useForm } from "effector-forms";
 
-import { APIUserRegister, APIUserSign } from "../api/types";
-import { createFormStore } from "../models/form";
 import { signIn, signInFx, signUp, signUpFx } from "../models/session";
 
 const sumbit = createEvent();
-const toggleSignUp = createEvent();
+const toggleRegister = createEvent();
 
-const form = createFormStore<APIUserRegister | APIUserSign>();
-const $isSignUp = createStore(false).on(toggleSignUp, (s) => !s);
+const authForm = createForm({
+  fields: {
+    register: {
+      init: false,
+      rules: [],
+    },
+    name: {
+      init: "",
+      rules: [
+        {
+          name: "required",
+          validator: (value: string, { register }) =>
+            Boolean(value) || !register,
+        },
+      ],
+    },
+    email: {
+      init: "",
+      rules: [
+        {
+          name: "email",
+          validator: (value: string) => /\S+@\S+\.\S+/.test(value),
+        },
+      ],
+    },
+    password: {
+      init: "",
+      rules: [
+        {
+          name: "required",
+          validator: (value: string) => Boolean(value),
+        },
+      ],
+    },
+  },
+  validateOn: ["change"],
+});
 
 sample({
   clock: merge([signInFx.done, signUpFx.done]),
-  target: form.clear,
+  target: authForm.reset,
+});
+
+sample({
+  clock: toggleRegister,
+  target: authForm.setForm,
+  source: authForm.$values.map((values) => values.register),
+  fn: (register) => ({ register: !register }),
 });
 
 split({
   clock: sumbit,
-  source: form.$store,
+  source: authForm.$values,
   match: {
-    signUp: $isSignUp,
+    signUp: authForm.$values.map((values) => values.register),
   },
   cases: {
     signUp,
@@ -68,12 +109,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const TextInput = form.controlled(TextInput_);
-const PasswordInput = form.controlled(PasswordInput_);
-
 const AuthPage = () => {
   const { classes } = useStyles();
-  const isSignUp = useStore($isSignUp);
+
+  const { fields, eachValid, values } = useForm(authForm);
 
   return (
     <div className={classes.wrapper}>
@@ -82,43 +121,63 @@ const AuthPage = () => {
           Welcome back!
         </Title>
 
-        {isSignUp && (
+        {values.register && (
           <TextInput
-            name="name"
             label="Name"
             placeholder="John Smith"
             size="md"
             mb="md"
+            value={fields.name.value}
+            onChange={(e) => fields.name.onChange(e.target.value)}
+            error={fields.name.errorText({
+              required: "field required",
+            })}
           />
         )}
         <TextInput
-          name="email"
           label="Email address"
           placeholder="hello@gmail.com"
           size="md"
+          value={fields.email.value}
+          onChange={(e) => fields.email.onChange(e.target.value)}
+          error={fields.email.errorText({
+            email: "you must enter a valid email address",
+          })}
         />
         <PasswordInput
-          name="password"
           label="Password"
           placeholder="Your password"
           mt="md"
           size="md"
+          value={fields.password.value}
+          onChange={(e) => fields.password.onChange(e.target.value)}
+          error={fields.password.errorText({
+            required: "password required",
+          })}
         />
-        <Button onClick={() => sumbit()} fullWidth mt="xl" size="md">
-          {isSignUp ? "Register" : "Login"}
+        <Button
+          disabled={!eachValid}
+          onClick={() => sumbit()}
+          fullWidth
+          mt="xl"
+          size="md"
+        >
+          {values.register ? "Register" : "Login"}
         </Button>
 
         <Text align="center" mt="md">
-          {isSignUp ? "Already have an account? " : "Don't have an account? "}
+          {values.register
+            ? "Already have an account? "
+            : "Don't have an account? "}
           <Anchor<"a">
             href="#"
             weight={700}
             onClick={(event) => {
               event.preventDefault();
-              toggleSignUp();
+              toggleRegister();
             }}
           >
-            {isSignUp ? "Sign in" : "Sign up"}
+            {values.register ? "Sign in" : "Sign up"}
           </Anchor>
         </Text>
       </Paper>

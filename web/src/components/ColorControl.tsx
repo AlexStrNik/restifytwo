@@ -14,12 +14,12 @@ interface ColorControlProps {
   onChange(value: string): void;
 }
 
-export function ColorControl({
+const ColorControl: React.FC<ColorControlProps> = ({
   value,
   label,
   onChange,
   ...others
-}: ColorControlProps) {
+}) => {
   const theme = useMantineTheme();
 
   const colors = Object.keys(theme.colors)
@@ -56,4 +56,6 @@ export function ColorControl({
       </Group>
     </Input.Wrapper>
   );
-}
+};
+
+export default ColorControl;

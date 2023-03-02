@@ -3,14 +3,14 @@ import { useStore } from "effector-react";
 
 import { $theme, setPrimaryColor } from "../models/theme";
 import { routes } from "../shared/routes";
-import { ColorControl } from "../components/ColorControl";
+import ColorControl from "../components/ColorControl";
 
 const PreferencesPage = () => {
   const theme = useStore($theme);
 
   return (
     <>
-      <Stack p="lg" maw={700} pos="relative">
+      <Stack p="xl" maw={700} pos="relative">
         <Title order={1}>Preferences</Title>
         <ColorControl
           label="Primary color"

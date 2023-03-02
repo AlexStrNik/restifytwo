@@ -11,6 +11,7 @@ class Restaurant(Base):
     name = Column(String, unique=True, index=True)
     about = Column(String)
     floor_id = Column(String)
+    archilogic_token = Column(String)
     owner_id = Column(Integer, ForeignKey('users.id'))
 
     owner = relationship('User', back_populates='owned_restaurants')

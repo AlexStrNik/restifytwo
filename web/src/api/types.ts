@@ -24,6 +24,8 @@ export interface APIRestaurant {
   id: number;
   name: string;
   about: string;
+  floor_id: string;
+  archilogic_token: string;
 }
 
 export interface APIRestaurantCreate {

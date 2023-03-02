@@ -30,6 +30,7 @@ const App = () => {
 
   return (
     <AppShell
+      asideOffsetBreakpoint="sm"
       navbar={<Navbar />}
       styles={(theme) => ({
         main: {
@@ -40,6 +41,7 @@ const App = () => {
           color: theme.colorScheme === "dark" ? theme.white : theme.black,
         },
       })}
+      padding={0}
     >
       <Pages />
     </AppShell>
@@ -58,6 +60,7 @@ const withProviders = <P extends {}>(App: ComponentType<P>) => {
             primaryColor: theme.primaryColor,
             primaryShade: theme.colorScheme === "dark" ? 7 : 5,
             loader: "dots",
+            fontFamily: "Mulish",
           }}
         >
           <App {...props} />
