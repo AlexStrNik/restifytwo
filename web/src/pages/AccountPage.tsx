@@ -65,7 +65,7 @@ const AccountPage = () => {
 
   return (
     <>
-      <Stack p="xl" maw={700} pos="relative">
+      <Stack p="lg" maw={700} pos="relative">
         <LoadingOverlay visible={loading} overlayBlur={2} />
         <Title order={1}>Account settings</Title>
         <TextInput

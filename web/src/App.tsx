@@ -1,6 +1,6 @@
 import { ComponentType, useEffect } from "react";
 import { useStore } from "effector-react";
-import { AppShell, MantineProvider } from "@mantine/core";
+import { AppShell, MantineProvider, ScrollArea } from "@mantine/core";
 import { createHistoryRouter } from "atomic-router";
 import { createBrowserHistory } from "history";
 import { RouterProvider } from "atomic-router-react";
@@ -43,7 +43,9 @@ const App = () => {
       })}
       padding={0}
     >
-      <Pages />
+      <div style={{ overflowY: "scroll", overflowX: "hidden" }}>
+        <Pages />
+      </div>
     </AppShell>
   );
 };

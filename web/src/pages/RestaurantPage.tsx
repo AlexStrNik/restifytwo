@@ -6,6 +6,7 @@ import {
   Title,
   useMantineTheme,
   createStyles,
+  Flex,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { useStore } from "effector-react";
@@ -52,43 +53,72 @@ const RestaurantPage = () => {
   const restaurant = useStore($restaurant);
   const theme = useMantineTheme();
 
-  const [value, setValue] = useState<Date | null>(null);
+  const [value, setValue] = useState<Date | undefined>();
 
   return (
     <div className={classes.wrapper}>
-      <Stack style={{ flexGrow: 1 }} p="xl" maw={700} pos="relative">
+      <Stack style={{ flexGrow: 1 }} p="lg" maw={700} pos="relative">
         <Title style={{ marginTop: 0 }} order={1}>
           {restaurant!.name}
         </Title>
         <Text>{restaurant!.about}</Text>
       </Stack>
-      <Stack style={{ flexGrow: 1 }} maw={700} className={classes.aside} p="xl">
+      <Stack style={{ flexGrow: 1 }} maw={700} className={classes.aside} p="lg">
         <Floorplan
           publishableToken={restaurant!.archilogic_token}
           floorId={restaurant!.floor_id}
         />
-        <Input.Wrapper labelElement="div" label={"Select date"}>
-          <Paper
-            bg={
-              theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.white
-            }
-            display="table-cell"
-            shadow="xs"
-            p="md"
-            withBorder
-          >
-            <Calendar
-              allowLevelChange={false}
-              minDate={new Date()}
-              maxDate={dayjs(new Date())
-                .add(1, "month")
-                .endOf("month")
-                .toDate()}
-              value={value}
-              onChange={setValue}
-            />
-          </Paper>
-        </Input.Wrapper>
+        <Flex wrap="wrap" justify="space-between" gap="md">
+          <Input.Wrapper labelElement="div" label={"Select date"}>
+            <Paper
+              bg={
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[6]
+                  : theme.white
+              }
+              display="table-cell"
+              shadow="xs"
+              p="md"
+              withBorder
+            >
+              <Calendar
+                // allowLevelChange={false}
+                minDate={new Date()}
+                maxDate={dayjs(new Date())
+                  .add(1, "month")
+                  .endOf("month")
+                  .toDate()}
+                date={value}
+                maxLevel="month"
+                onDateChange={setValue}
+              />
+            </Paper>
+          </Input.Wrapper>
+          <Input.Wrapper labelElement="div" label={"Select time"}>
+            <Paper
+              bg={
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[6]
+                  : theme.white
+              }
+              display="table-cell"
+              shadow="xs"
+              p="md"
+              withBorder
+            >
+              {/* <Calendar
+                allowLevelChange={false}
+                minDate={new Date()}
+                maxDate={dayjs(new Date())
+                  .add(1, "month")
+                  .endOf("month")
+                  .toDate()}
+                value={value}
+                onChange={setValue}
+              /> */}
+            </Paper>
+          </Input.Wrapper>
+        </Flex>
       </Stack>
     </div>
   );

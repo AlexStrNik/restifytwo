@@ -1,15 +1,21 @@
-import { createStyles, Text, Tooltip, UnstyledButton } from "@mantine/core";
+import {
+  createStyles,
+  getStylesRef,
+  rem,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Icon } from "@tabler/icons-react";
 import React from "react";
 
-const useStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef("icon");
+const useStyles = createStyles((theme) => {
+  const icon = getStylesRef("icon");
 
   return {
     linkMobile: {
-      width: 50,
-      height: 50,
+      width: rem(50),
+      height: rem(50),
       borderRadius: theme.radius.md,
       display: "flex",
       alignItems: "center",
@@ -37,7 +43,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
         theme.colorScheme === "dark"
           ? theme.colors.dark[1]
           : theme.colors.gray[7],
-      padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+      padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
@@ -100,20 +106,17 @@ interface NavbarLinkProps {
 
 const NavbarMobileLink: React.FC<NavbarLinkProps> = ({
   icon: Icon,
-  label,
   active,
   onClick,
 }) => {
   const { classes, cx } = useStyles();
   return (
-    <Tooltip label={label} position="right" transitionDuration={0}>
-      <UnstyledButton
-        onClick={onClick}
-        className={cx(classes.linkMobile, { [classes.active]: active })}
-      >
-        <Icon className={cx(classes.linkIcon)} stroke={1.5} />
-      </UnstyledButton>
-    </Tooltip>
+    <UnstyledButton
+      onClick={onClick}
+      className={cx(classes.linkMobile, { [classes.active]: active })}
+    >
+      <Icon className={cx(classes.linkIcon)} stroke={1.5} />
+    </UnstyledButton>
   );
 };
 

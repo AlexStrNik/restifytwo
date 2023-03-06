@@ -10,7 +10,7 @@ const PreferencesPage = () => {
 
   return (
     <>
-      <Stack p="xl" maw={700} pos="relative">
+      <Stack p="lg" maw={700} pos="relative">
         <Title order={1}>Preferences</Title>
         <ColorControl
           label="Primary color"

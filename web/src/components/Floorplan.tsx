@@ -1,6 +1,10 @@
 // @ts-nocheck
-import { createStyles, MantineTheme, useMantineTheme } from "@mantine/core";
-import { rem } from "@mantine/styles";
+import {
+  createStyles,
+  rem,
+  MantineTheme,
+  useMantineTheme,
+} from "@mantine/core";
 import { useEffect, useRef } from "react";
 
 interface FloorplanProps {

@@ -24,7 +24,7 @@ const RestaurantsPage = () => {
   const restaurants = useList($restaurants, (restaurant: APIRestaurant) => (
     <Card
       shadow="sm"
-      p="lg"
+      padding="xs"
       radius="md"
       withBorder
       display="flex"
@@ -64,7 +64,7 @@ const RestaurantsPage = () => {
     </Card>
   ));
   return (
-    <Stack p="xl">
+    <Stack p="lg">
       <Title order={1}>Restaurants</Title>
       <SimpleGrid
         cols={3}
