@@ -1,6 +1,5 @@
 import jwt
 import bcrypt
-from time import sleep
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -43,6 +42,4 @@ def me(user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_d
 
 @router.post('/me', response_model=APIUser)
 def me(data: APIUserUpdate, user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
-    sleep(1)
-    
     return update_user(db, id=user.id, data=data)

@@ -5,7 +5,7 @@ import {
   MantineTheme,
   useMantineTheme,
 } from "@mantine/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 
 interface FloorplanProps {
   floorId: string;
@@ -160,4 +160,4 @@ const Floorplan: React.FC<FloorplanProps> = ({
   return <div className={classes.wrapper} ref={ref}></div>;
 };
 
-export default Floorplan;
+export default memo(Floorplan);

@@ -14,9 +14,6 @@ class APIReservationCreate(ReservationBase):
 
 class ReservationCreate(APIReservationCreate):
     guest_id: int
-    table_id: str
-    restaurant_id: int
-
 
 class Reservation(ReservationBase):
     id: int

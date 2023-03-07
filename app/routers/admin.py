@@ -1,4 +1,3 @@
-from time import sleep
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -12,7 +11,6 @@ router = APIRouter(prefix='/api/admin')
 
 @router.get('/restaurants', response_model=List[APIRestaurant])
 def restaurants(user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
-    sleep(1)
     if not user.is_admin:
         raise HTTPException(403, 'Admins only')
     
@@ -20,7 +18,6 @@ def restaurants(user: JWTUser = Depends(get_user_from_token), db: Session = Depe
 
 @router.post('/restaurants', response_model=APIRestaurant)
 def add_restaraunt(restaraunt: APIRestaurantCreate, user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
-    sleep(1)
     if not user.is_admin:
         raise HTTPException(403, 'Admin only')
 

@@ -64,66 +64,64 @@ const AccountPage = () => {
   const { fields, eachValid } = useForm(accountForm);
 
   return (
-    <>
-      <Stack p="lg" maw={700} pos="relative">
-        <LoadingOverlay visible={loading} overlayBlur={2} />
-        <Title order={1}>Account settings</Title>
-        <TextInput
-          name="name"
-          placeholder="User name"
-          label="Name"
-          value={fields.name.value}
-          onChange={(e) => fields.name.onChange(e.target.value)}
-          error={fields.name.errorText({
-            required: "name required",
-          })}
-        ></TextInput>
+    <Stack p="lg" maw={700}>
+      <LoadingOverlay visible={loading} overlayBlur={2} />
+      <Title order={1}>Account settings</Title>
+      <TextInput
+        name="name"
+        placeholder="User name"
+        label="Name"
+        value={fields.name.value}
+        onChange={(e) => fields.name.onChange(e.target.value)}
+        error={fields.name.errorText({
+          required: "name required",
+        })}
+      ></TextInput>
 
-        {user?.is_admin && (
-          <>
-            <TextInput
-              name="archilogic_secret_token"
-              placeholder="User token"
-              label="Archilogic Token (Secret)"
-              size="md"
-              mt="md"
-              value={fields.archilogic_secret_token.value}
-              onChange={(e) =>
-                fields.archilogic_secret_token.onChange(e.target.value)
-              }
-              error={fields.archilogic_secret_token.errorText({
-                required: "field required",
-              })}
-            ></TextInput>
-            <TextInput
-              name="archilogic_public_token"
-              placeholder="User token"
-              label="Archilogic Token (Public)"
-              size="md"
-              mt="md"
-              value={fields.archilogic_public_token.value}
-              onChange={(e) =>
-                fields.archilogic_public_token.onChange(e.target.value)
-              }
-              error={fields.archilogic_public_token.errorText({
-                required: "field required",
-              })}
-            ></TextInput>
-          </>
-        )}
+      {user?.is_admin && (
+        <>
+          <TextInput
+            name="archilogic_secret_token"
+            placeholder="User token"
+            label="Archilogic Token (Secret)"
+            size="md"
+            mt="md"
+            value={fields.archilogic_secret_token.value}
+            onChange={(e) =>
+              fields.archilogic_secret_token.onChange(e.target.value)
+            }
+            error={fields.archilogic_secret_token.errorText({
+              required: "field required",
+            })}
+          ></TextInput>
+          <TextInput
+            name="archilogic_public_token"
+            placeholder="User token"
+            label="Archilogic Token (Public)"
+            size="md"
+            mt="md"
+            value={fields.archilogic_public_token.value}
+            onChange={(e) =>
+              fields.archilogic_public_token.onChange(e.target.value)
+            }
+            error={fields.archilogic_public_token.errorText({
+              required: "field required",
+            })}
+          ></TextInput>
+        </>
+      )}
 
-        <Button
-          className="AccountPage-Submit"
-          fullWidth
-          mt="xl"
-          size="md"
-          onClick={() => accountSubmit()}
-          disabled={!eachValid}
-        >
-          Update account
-        </Button>
-      </Stack>
-    </>
+      <Button
+        className="AccountPage-Submit"
+        fullWidth
+        mt="xl"
+        size="md"
+        onClick={() => accountSubmit()}
+        disabled={!eachValid}
+      >
+        Update account
+      </Button>
+    </Stack>
   );
 };
 

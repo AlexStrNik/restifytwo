@@ -20,12 +20,14 @@ import dayjs from "dayjs";
 
 import { routes } from "../shared/routes";
 import Floorplan from "../components/Floorplan";
-import { $restaurant, loadRestaurantFx } from "../models/restaurants";
 import {
   $reservationsForTable,
-  loadReservationsForTableFx,
-} from "../models/reservations";
-import { forward } from "effector";
+  $restaurant,
+  loadReservationsForTableFx as _loadReservationsForTableFx,
+  loadRestaurantFx,
+} from "../models/restaurants";
+import { attach, forward } from "effector";
+import { GuestsInput } from "../components/GuestsInput";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("lg");
@@ -80,6 +82,15 @@ const bookingForm = createForm({
   },
 });
 
+const loadReservationsForTableFx = attach({
+  source: $restaurant,
+  effect: _loadReservationsForTableFx,
+  mapParams: (params: string, states) => ({
+    restaurant: states?.id as number,
+    table: params,
+  }),
+});
+
 forward({
   from: bookingForm.fields.table.onChange,
   to: loadReservationsForTableFx,
@@ -109,64 +120,70 @@ const RestaurantPage = () => {
           tableChanged={fields.table.onChange}
         />
         <Collapse in={reservations != null}>
-          <SimpleGrid
-            cols={2}
-            spacing="md"
-            breakpoints={[{ maxWidth: "36rem", cols: 1, spacing: "sm" }]}
-            pos="relative"
-          >
-            <LoadingOverlay visible={reservationsLoading} overlayBlur={2} />
-            <Input.Wrapper labelElement="div" label={"Select date"}>
-              <Paper
-                bg={
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[6]
-                    : theme.white
-                }
-                display="table-cell"
-                shadow="xs"
-                p="md"
-                withBorder
-              >
-                <Calendar
-                  minDate={new Date()}
-                  maxDate={dayjs(new Date())
-                    .add(1, "month")
-                    .endOf("month")
-                    .toDate()}
-                  getDayProps={(date) => ({
-                    selected: dayjs(date).isSame(fields.time.value, "date"),
-                    onClick: () => fields.time.onChange(date),
-                  })}
-                  maxLevel="month"
-                />
-              </Paper>
-            </Input.Wrapper>
-            <Input.Wrapper
-              style={{ flexGrow: 1 }}
-              labelElement="div"
-              label={"Select time"}
+          <Stack>
+            <SimpleGrid
+              cols={2}
+              spacing="md"
+              breakpoints={[{ maxWidth: "36rem", cols: 1, spacing: "sm" }]}
+              pos="relative"
             >
-              <Flex wrap="wrap" gap="xs" justify="stretch">
-                {[...Array(24).keys()]
-                  .map((i) =>
-                    dayjs(fields.time.value).startOf("day").add(i, "hour")
-                  )
-                  .map((time) => (
-                    <Button
-                      key={time.toString()}
-                      style={{ flexGrow: 1 }}
-                      variant={
-                        time.isSame(fields.time.value) ? "outline" : "default"
-                      }
-                      onClick={() => fields.time.onChange(time.toDate())}
-                    >
-                      {time.format("HH:mm")}
-                    </Button>
-                  ))}
-              </Flex>
-            </Input.Wrapper>
-          </SimpleGrid>
+              <LoadingOverlay visible={reservationsLoading} overlayBlur={2} />
+              <Input.Wrapper labelElement="div" label={"Select date"}>
+                <Paper
+                  bg={
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[6]
+                      : theme.white
+                  }
+                  display="flex"
+                  style={{ justifyContent: "center" }}
+                  shadow="xs"
+                  p="md"
+                  withBorder
+                >
+                  <Calendar
+                    minDate={new Date()}
+                    maxDate={dayjs(new Date())
+                      .add(1, "month")
+                      .endOf("month")
+                      .toDate()}
+                    getDayProps={(date) => ({
+                      selected: dayjs(date).isSame(fields.time.value, "date"),
+                      onClick: () => fields.time.onChange(date),
+                    })}
+                    maxLevel="month"
+                  />
+                </Paper>
+              </Input.Wrapper>
+              <Input.Wrapper
+                style={{ flexGrow: 1 }}
+                labelElement="div"
+                label={"Select time"}
+              >
+                <Flex wrap="wrap" gap="xs" justify="stretch">
+                  {[...Array(24).keys()]
+                    .map((i) =>
+                      dayjs(fields.time.value).startOf("day").add(i, "hour")
+                    )
+                    .map((time) => (
+                      <Button
+                        key={time.toString()}
+                        style={{ flexGrow: 1 }}
+                        variant={
+                          time.isSame(fields.time.value) ? "filled" : "default"
+                        }
+                        onClick={() => fields.time.onChange(time.toDate())}
+                      >
+                        {time.format("HH:mm")}
+                      </Button>
+                    ))}
+                </Flex>
+              </Input.Wrapper>
+              <Input.Wrapper labelElement="div" label={"Enter guests count"}>
+                <GuestsInput />
+              </Input.Wrapper>
+            </SimpleGrid>
+          </Stack>
         </Collapse>
       </Stack>
     </div>
