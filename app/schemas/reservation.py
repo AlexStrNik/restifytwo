@@ -2,8 +2,6 @@ from datetime import date
 from pydantic import BaseModel
 
 from .restaurant import Restaurant
-from .table import Table
-
 
 class ReservationBase(BaseModel):
     guests_count: int
@@ -16,7 +14,7 @@ class APIReservationCreate(ReservationBase):
 
 class ReservationCreate(APIReservationCreate):
     guest_id: int
-    table_id: int
+    table_id: str
     restaurant_id: int
 
 
@@ -27,3 +25,6 @@ class Reservation(ReservationBase):
 
     class Config:
         orm_mode = True
+
+class APIReservation(Reservation):
+    pass

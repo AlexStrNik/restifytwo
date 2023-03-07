@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react";
 interface FloorplanProps {
   floorId: string;
   publishableToken: string;
+  tableChanged: (string) => void;
 }
 
 const makeTheme = (theme: MantineTheme) => ({
@@ -92,7 +93,11 @@ const toRGBArray = (hex: string) =>
         parseInt(hex.substring(5, 7), 16),
       ];
 
-const Floorplan: React.FC<FloorplanProps> = ({ floorId, publishableToken }) => {
+const Floorplan: React.FC<FloorplanProps> = ({
+  floorId,
+  publishableToken,
+  tableChanged,
+}) => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
   const ref = useRef(null);
@@ -100,12 +105,6 @@ const Floorplan: React.FC<FloorplanProps> = ({ floorId, publishableToken }) => {
 
   useEffect(() => {
     if (!ref.current) return;
-
-    console.log(theme.fn.variant({ variant: "default" }));
-
-    console.log(toRGBArray("#fff"));
-
-    console.log(theme.white);
 
     const floorPlan = new FloorPlanEngine(ref.current, {
       theme: makeTheme(theme),
@@ -149,6 +148,8 @@ const Floorplan: React.FC<FloorplanProps> = ({ floorId, publishableToken }) => {
           });
           floorPlan.zoomToElement(asset.node, 2, 250);
           selectedTable.current = asset.node;
+
+          tableChanged(asset.id);
 
           return;
         }

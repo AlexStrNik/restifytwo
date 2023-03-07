@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey
+from sqlalchemy import Column, Integer, Date, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from ..database import Base
-from .table import Table
+from .restaurant import Restaurant
 
 
 class Reservation(Base):
@@ -10,7 +10,7 @@ class Reservation(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     guest_id = Column(Integer, ForeignKey('users.id'))
-    table_id = Column(Integer, ForeignKey('tables.id'))
+    table_id = Column(String)
     restaurant_id = Column(Integer, ForeignKey('restaurants.id'))
     guests_count = Column(Integer)
     date = Column(Date)

@@ -16,4 +16,4 @@ class Restaurant(Base):
 
     owner = relationship('User', back_populates='owned_restaurants')
     reservations = relationship('Reservation', back_populates='restaurant')
-    tables = relationship('Table', back_populates='restaurant')
+

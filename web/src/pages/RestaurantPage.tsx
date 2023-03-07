@@ -7,16 +7,25 @@ import {
   useMantineTheme,
   createStyles,
   Flex,
+  Button,
+  SimpleGrid,
+  Collapse,
+  LoadingOverlay,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { useStore } from "effector-react";
+import { createForm, useForm } from "effector-forms";
+import { chainRoute } from "atomic-router";
+import dayjs from "dayjs";
 
 import { routes } from "../shared/routes";
-import { $restaurant, loadRestaurantFx } from "../models/restaurants";
-import { chainRoute } from "atomic-router";
-import { useState } from "react";
-import dayjs from "dayjs";
 import Floorplan from "../components/Floorplan";
+import { $restaurant, loadRestaurantFx } from "../models/restaurants";
+import {
+  $reservationsForTable,
+  loadReservationsForTableFx,
+} from "../models/reservations";
+import { forward } from "effector";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("lg");
@@ -48,12 +57,42 @@ const useStyles = createStyles((theme) => {
   };
 });
 
+const bookingForm = createForm({
+  fields: {
+    table: {
+      init: "",
+      rules: [
+        {
+          name: "required",
+          validator: (value: string) => Boolean(value),
+        },
+      ],
+    },
+    time: {
+      init: dayjs(new Date()).startOf("day").toDate(),
+      rules: [
+        {
+          name: "required",
+          validator: (value: Date) => Boolean(value),
+        },
+      ],
+    },
+  },
+});
+
+forward({
+  from: bookingForm.fields.table.onChange,
+  to: loadReservationsForTableFx,
+});
+
 const RestaurantPage = () => {
   const { classes } = useStyles();
-  const restaurant = useStore($restaurant);
   const theme = useMantineTheme();
 
-  const [value, setValue] = useState<Date | undefined>();
+  const restaurant = useStore($restaurant);
+  const reservations = useStore($reservationsForTable);
+  const reservationsLoading = useStore(loadReservationsForTableFx.pending);
+  const { fields, eachValid } = useForm(bookingForm);
 
   return (
     <div className={classes.wrapper}>
@@ -67,58 +106,68 @@ const RestaurantPage = () => {
         <Floorplan
           publishableToken={restaurant!.archilogic_token}
           floorId={restaurant!.floor_id}
+          tableChanged={fields.table.onChange}
         />
-        <Flex wrap="wrap" justify="space-between" gap="md">
-          <Input.Wrapper labelElement="div" label={"Select date"}>
-            <Paper
-              bg={
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[6]
-                  : theme.white
-              }
-              display="table-cell"
-              shadow="xs"
-              p="md"
-              withBorder
+        <Collapse in={reservations != null}>
+          <SimpleGrid
+            cols={2}
+            spacing="md"
+            breakpoints={[{ maxWidth: "36rem", cols: 1, spacing: "sm" }]}
+            pos="relative"
+          >
+            <LoadingOverlay visible={reservationsLoading} overlayBlur={2} />
+            <Input.Wrapper labelElement="div" label={"Select date"}>
+              <Paper
+                bg={
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[6]
+                    : theme.white
+                }
+                display="table-cell"
+                shadow="xs"
+                p="md"
+                withBorder
+              >
+                <Calendar
+                  minDate={new Date()}
+                  maxDate={dayjs(new Date())
+                    .add(1, "month")
+                    .endOf("month")
+                    .toDate()}
+                  getDayProps={(date) => ({
+                    selected: dayjs(date).isSame(fields.time.value, "date"),
+                    onClick: () => fields.time.onChange(date),
+                  })}
+                  maxLevel="month"
+                />
+              </Paper>
+            </Input.Wrapper>
+            <Input.Wrapper
+              style={{ flexGrow: 1 }}
+              labelElement="div"
+              label={"Select time"}
             >
-              <Calendar
-                // allowLevelChange={false}
-                minDate={new Date()}
-                maxDate={dayjs(new Date())
-                  .add(1, "month")
-                  .endOf("month")
-                  .toDate()}
-                date={value}
-                maxLevel="month"
-                onDateChange={setValue}
-              />
-            </Paper>
-          </Input.Wrapper>
-          <Input.Wrapper labelElement="div" label={"Select time"}>
-            <Paper
-              bg={
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[6]
-                  : theme.white
-              }
-              display="table-cell"
-              shadow="xs"
-              p="md"
-              withBorder
-            >
-              {/* <Calendar
-                allowLevelChange={false}
-                minDate={new Date()}
-                maxDate={dayjs(new Date())
-                  .add(1, "month")
-                  .endOf("month")
-                  .toDate()}
-                value={value}
-                onChange={setValue}
-              /> */}
-            </Paper>
-          </Input.Wrapper>
-        </Flex>
+              <Flex wrap="wrap" gap="xs" justify="stretch">
+                {[...Array(24).keys()]
+                  .map((i) =>
+                    dayjs(fields.time.value).startOf("day").add(i, "hour")
+                  )
+                  .map((time) => (
+                    <Button
+                      key={time.toString()}
+                      style={{ flexGrow: 1 }}
+                      variant={
+                        time.isSame(fields.time.value) ? "outline" : "default"
+                      }
+                      onClick={() => fields.time.onChange(time.toDate())}
+                    >
+                      {time.format("HH:mm")}
+                    </Button>
+                  ))}
+              </Flex>
+            </Input.Wrapper>
+          </SimpleGrid>
+        </Collapse>
       </Stack>
     </div>
   );

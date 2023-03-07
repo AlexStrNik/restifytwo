@@ -5,15 +5,13 @@ from sqlalchemy.orm import Session
 from ..models.reservation import Reservation
 from ..schemas.reservation import ReservationCreate, Reservation as ReservationScheme
 
-def get_reservations(db: Session, for_user: int = None, for_restaraunt: int = None, for_date: date = None) -> List[ReservationScheme]:
+def get_reservations(db: Session, for_user: int = None, for_table: str = None) -> List[ReservationScheme]:
     query = db.query(Reservation)
     
     if for_user:
         query = query.filter(Reservation.guest_id == for_user)
-    if for_restaraunt:
-        query = query.filter(Reservation.restaurant_id == for_restaraunt)
-    if for_date:
-        query = query.filter(Reservation.date == for_date)
+    if for_table:
+        query = query.filter(Reservation.table_id == for_table)
     
     return query.all()
 
