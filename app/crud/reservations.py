@@ -19,6 +19,7 @@ def get_reservations(db: Session, for_user: int = None, for_restaurant: int = No
 
 def create_reservation(db: Session, reservation: ReservationCreate) -> ReservationScheme:
     db_reservation = Reservation(
+        guest_id=reservation.guest_id,
         guests_count=reservation.guests_count, 
         date=reservation.date, 
         restaurant_id=reservation.restaurant_id,

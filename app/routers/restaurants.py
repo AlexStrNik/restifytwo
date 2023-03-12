@@ -2,11 +2,13 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from ..dependencies import get_db
+from app.schemas.auth import JWTUser
+
+from ..dependencies import get_db, get_user_from_token
 from ..schemas.restaurant import APIRestaurant
-from ..schemas.reservation import APIReservation
+from ..schemas.reservation import APIReservation, APIReservationCreate, ReservationCreate
 from ..crud.restaurants import get_restaurant, get_restaurants
-from ..crud.reservations import get_reservations
+from ..crud.reservations import create_reservation, get_reservations
 
 router = APIRouter(prefix='/api/restaurants')
 
@@ -19,5 +21,16 @@ def list_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
     return get_restaurant(db, by_id=restaurant_id)
 
 @router.get('/{restaurant_id}/reservaions/{table_id}', response_model=List[APIReservation])
-def list_restaurants(restaurant_id: int, table_id: str, db: Session = Depends(get_db)):
-    return get_reservations(db, for_table=table_id)
+def list_reservations(restaurant_id: int, table_id: str, db: Session = Depends(get_db)):
+    return get_reservations(db, for_table=table_id, for_restaurant=restaurant_id)
+
+@router.post('/{restaurant_id}/reservaions/{table_id}', response_model=APIReservation)
+def reservation_create(reservation: APIReservationCreate, restaurant_id: int, table_id: str, user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
+
+    return create_reservation(db, ReservationCreate(
+        restaurant_id=restaurant_id,
+        table_id=table_id,
+        guest_id=user.id,
+        guests_count=reservation.guests_count,
+        date=reservation.date
+    ))

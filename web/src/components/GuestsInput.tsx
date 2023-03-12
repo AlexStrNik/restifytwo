@@ -5,6 +5,7 @@ import {
   NumberInputHandlers,
   ActionIcon,
   rem,
+  NumberInputProps,
 } from "@mantine/core";
 import { IconPlus, IconMinus } from "@tabler/icons-react";
 
@@ -50,15 +51,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface QuantityInputProps {
+interface QuantityInputProps extends NumberInputProps {
   min?: number;
   max?: number;
 }
 
-export function GuestsInput({ min = 1, max = 4 }: QuantityInputProps) {
+export function GuestsInput({
+  min = 1,
+  max = 4,
+  value,
+  onChange,
+}: QuantityInputProps) {
   const { classes } = useStyles();
   const handlers = useRef<NumberInputHandlers>(null);
-  const [value, setValue] = useState<number | "">(1);
 
   return (
     <div className={classes.wrapper}>
@@ -79,7 +84,7 @@ export function GuestsInput({ min = 1, max = 4 }: QuantityInputProps) {
         max={max}
         handlersRef={handlers}
         value={value}
-        onChange={setValue}
+        onChange={onChange}
         classNames={{ input: classes.input }}
       />
 

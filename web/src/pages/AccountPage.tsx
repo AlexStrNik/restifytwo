@@ -6,7 +6,6 @@ import { useStore } from "effector-react";
 import { routes } from "../shared/routes";
 import { APIUserUpdate } from "../api/types";
 import { $user, updateAccount, updateAccountFx } from "../models/user";
-import { useEffect } from "react";
 
 const accountForm = createForm({
   fields: {

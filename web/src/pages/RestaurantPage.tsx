@@ -23,11 +23,13 @@ import Floorplan from "../components/Floorplan";
 import {
   $reservationsForTable,
   $restaurant,
+  createReservationFx as _createReservationFx,
   loadReservationsForTableFx as _loadReservationsForTableFx,
   loadRestaurantFx,
 } from "../models/restaurants";
-import { attach, forward } from "effector";
+import { attach, createEvent, forward, sample } from "effector";
 import { GuestsInput } from "../components/GuestsInput";
+import { APIReservationCreate } from "../api/types";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("lg");
@@ -59,7 +61,7 @@ const useStyles = createStyles((theme) => {
   };
 });
 
-const bookingForm = createForm({
+const reservationForm = createForm({
   fields: {
     table: {
       init: "",
@@ -70,12 +72,21 @@ const bookingForm = createForm({
         },
       ],
     },
-    time: {
+    date: {
       init: dayjs(new Date()).startOf("day").toDate(),
       rules: [
         {
           name: "required",
           validator: (value: Date) => Boolean(value),
+        },
+      ],
+    },
+    guests_count: {
+      init: 1,
+      rules: [
+        {
+          name: "valid",
+          validator: (value: number) => value >= 1 && value <= 4,
         },
       ],
     },
@@ -92,8 +103,29 @@ const loadReservationsForTableFx = attach({
 });
 
 forward({
-  from: bookingForm.fields.table.onChange,
+  from: reservationForm.fields.table.onChange,
   to: loadReservationsForTableFx,
+});
+
+const reservationSubmit = createEvent();
+
+const createReservationFx = attach({
+  source: $restaurant,
+  effect: _createReservationFx,
+  mapParams: (params: Omit<APIReservationCreate, "restaurant">, states) => ({
+    ...params,
+    restaurant: states?.id as number,
+  }),
+});
+
+sample({
+  clock: reservationSubmit,
+  source: reservationForm.$values,
+  fn: (src, clk) => ({
+    ...src,
+    date: dayjs(src.date).format("YYYY-MM-DD[T]HH:mm"),
+  }),
+  target: createReservationFx,
 });
 
 const RestaurantPage = () => {
@@ -103,7 +135,7 @@ const RestaurantPage = () => {
   const restaurant = useStore($restaurant);
   const reservations = useStore($reservationsForTable);
   const reservationsLoading = useStore(loadReservationsForTableFx.pending);
-  const { fields, eachValid } = useForm(bookingForm);
+  const { fields, eachValid } = useForm(reservationForm);
 
   return (
     <div className={classes.wrapper}>
@@ -148,8 +180,8 @@ const RestaurantPage = () => {
                       .endOf("month")
                       .toDate()}
                     getDayProps={(date) => ({
-                      selected: dayjs(date).isSame(fields.time.value, "date"),
-                      onClick: () => fields.time.onChange(date),
+                      selected: dayjs(date).isSame(fields.date.value, "date"),
+                      onClick: () => fields.date.onChange(date),
                     })}
                     maxLevel="month"
                   />
@@ -163,16 +195,16 @@ const RestaurantPage = () => {
                 <Flex wrap="wrap" gap="xs" justify="stretch">
                   {[...Array(24).keys()]
                     .map((i) =>
-                      dayjs(fields.time.value).startOf("day").add(i, "hour")
+                      dayjs(fields.date.value).startOf("day").add(i, "hour")
                     )
                     .map((time) => (
                       <Button
                         key={time.toString()}
                         style={{ flexGrow: 1 }}
                         variant={
-                          time.isSame(fields.time.value) ? "filled" : "default"
+                          time.isSame(fields.date.value) ? "filled" : "default"
                         }
-                        onClick={() => fields.time.onChange(time.toDate())}
+                        onClick={() => fields.date.onChange(time.toDate())}
                       >
                         {time.format("HH:mm")}
                       </Button>
@@ -180,9 +212,20 @@ const RestaurantPage = () => {
                 </Flex>
               </Input.Wrapper>
               <Input.Wrapper labelElement="div" label={"Enter guests count"}>
-                <GuestsInput />
+                <GuestsInput
+                  value={fields.guests_count.value}
+                  onChange={fields.guests_count.onChange}
+                />
               </Input.Wrapper>
             </SimpleGrid>
+            <Button
+              onClick={() => reservationSubmit()}
+              fullWidth
+              mt="xl"
+              size="md"
+            >
+              Confirm reservation
+            </Button>
           </Stack>
         </Collapse>
       </Stack>

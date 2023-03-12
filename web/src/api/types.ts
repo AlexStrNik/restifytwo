@@ -49,3 +49,10 @@ export interface APIReservation {
   guests_count: number;
   date: string;
 }
+
+export interface APIReservationCreate {
+  restaurant: number;
+  table: string;
+  guests_count: number;
+  date: string;
+}
