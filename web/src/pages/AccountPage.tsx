@@ -5,7 +5,7 @@ import { useStore } from "effector-react";
 
 import { routes } from "../shared/routes";
 import { APIUserUpdate } from "../api/types";
-import { $user, updateAccount, updateAccountFx } from "../models/user";
+import { $user, updateAccountFx } from "../models/user";
 
 const accountForm = createForm({
   fields: {
@@ -54,7 +54,7 @@ sample({
 sample({
   clock: accountSubmit,
   source: accountForm.$values,
-  target: updateAccount,
+  target: updateAccountFx,
 });
 
 const AccountPage = () => {
@@ -75,7 +75,7 @@ const AccountPage = () => {
         error={fields.name.errorText({
           required: "name required",
         })}
-      ></TextInput>
+      />
 
       {user?.is_admin && (
         <>
@@ -92,7 +92,7 @@ const AccountPage = () => {
             error={fields.archilogic_secret_token.errorText({
               required: "field required",
             })}
-          ></TextInput>
+          />
           <TextInput
             name="archilogic_public_token"
             placeholder="User token"
@@ -106,12 +106,11 @@ const AccountPage = () => {
             error={fields.archilogic_public_token.errorText({
               required: "field required",
             })}
-          ></TextInput>
+          />
         </>
       )}
 
       <Button
-        className="AccountPage-Submit"
         fullWidth
         mt="xl"
         size="md"

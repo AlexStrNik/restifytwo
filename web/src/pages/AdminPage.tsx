@@ -1,27 +1,27 @@
+import {
+  Card,
+  Image,
+  Text,
+  Button,
+  useMantineTheme,
+  Stack,
+  SimpleGrid,
+  Title,
+  Group,
+} from "@mantine/core";
+import { Link } from "atomic-router-react";
 import { chainRoute } from "atomic-router";
 import { useList } from "effector-react";
-import { Link } from "atomic-router-react";
-import {
-  Button,
-  Card,
-  Group,
-  Image,
-  Rating,
-  SimpleGrid,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
 
-import { $restaurants, loadRestaurantsFx } from "../models/restaurants";
+import { $myRestaurants, loadRestaurantsFx } from "../models/admin";
 import { APIRestaurant } from "../api/types";
 import { routes } from "../shared/routes";
+import { adminOnly } from "../models/user";
 
-const RestaurantsPage = () => {
+export const AdminPage = () => {
   const theme = useMantineTheme();
 
-  const restaurants = useList($restaurants, (restaurant: APIRestaurant) => (
+  const restaurants = useList($myRestaurants, (restaurant: APIRestaurant) => (
     <Card
       shadow="sm"
       padding="xs"
@@ -38,15 +38,7 @@ const RestaurantsPage = () => {
         />
       </Card.Section>
 
-      <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>{restaurant.name}</Text>
-        <Rating
-          color={theme.primaryColor}
-          defaultValue={3.45}
-          readOnly
-          fractions={2}
-        />
-      </Group>
+      <Text weight={500}>{restaurant.name}</Text>
 
       <Text style={{ flexGrow: 1 }} size="sm" color="dimmed" lineClamp={4}>
         {restaurant.about}
@@ -58,14 +50,23 @@ const RestaurantsPage = () => {
         style={{ display: "contents" }}
       >
         <Button variant="light" fullWidth mt="md" radius="md">
-          Book now
+          Edit
         </Button>
       </Link>
     </Card>
   ));
+
   return (
     <Stack p="lg">
-      <Title order={1}>Restaurants</Title>
+      <Group position="apart" mt="md" mb="xs">
+        <Title order={1}>Restaurants</Title>
+        <Link to={routes.restaurants.new} style={{ display: "contents" }}>
+          <Button variant="light" mt="md" radius="md">
+            Create new
+          </Button>
+        </Link>
+      </Group>
+
       <SimpleGrid
         cols={3}
         spacing="lg"
@@ -81,7 +82,7 @@ const RestaurantsPage = () => {
 };
 
 const route = chainRoute({
-  route: routes.restaurants.list,
+  route: adminOnly(routes.admin),
   beforeOpen: {
     effect: loadRestaurantsFx,
     mapParams: () => null,
@@ -89,6 +90,6 @@ const route = chainRoute({
 });
 
 export default {
-  route,
-  view: RestaurantsPage,
+  route: route,
+  view: AdminPage,
 };

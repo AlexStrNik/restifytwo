@@ -1,8 +1,14 @@
-import { createStore, createEffect, sample, createEvent } from "effector";
+import { createEffect, sample, createEvent, restore } from "effector";
 
-import { APIUserSign, APIUserRegister, APIAuth } from "../api/types";
+import { APIUserSign, APIUserRegister } from "../api/types";
 import { login, regsiter } from "../api/auth";
 import { pageMounted } from "./page";
+import {
+  RouteInstance,
+  RouteParams,
+  RouteParamsAndQuery,
+  chainRoute,
+} from "atomic-router";
 
 export const signInFx = createEffect(async (data: APIUserSign) => {
   const auth = await login(data);
@@ -26,10 +32,22 @@ const loadUserFx = createEffect(() => {
   return source;
 });
 
-export const $session = createStore<string | null>(null).on(
-  loadUserFx.doneData,
-  (_, user) => user
-);
+export const $session = restore(loadUserFx, null);
+
+export const authorized = <P extends RouteParams>(route: RouteInstance<P>) => {
+  const sessionCheckStarted = createEvent<RouteParamsAndQuery<P>>();
+
+  const alreadyAuthorized = sample({
+    clock: sessionCheckStarted,
+    filter: $session.map((s) => s !== null),
+  });
+
+  return chainRoute({
+    route: route,
+    beforeOpen: sessionCheckStarted,
+    openOn: [alreadyAuthorized, loadUserFx.doneData],
+  });
+};
 
 export const signIn = createEvent<APIUserSign>();
 export const signUp = createEvent<APIUserRegister>();

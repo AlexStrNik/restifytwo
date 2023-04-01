@@ -17,7 +17,7 @@ def list_floors(db = Depends(get_db), user: JWTUser = Depends(get_user_from_toke
     if (not user.is_admin):
         raise HTTPException(403, 'Admins only')
 
-    archilogic_token = get_user(db, by_id=user.id).archilogic_token
+    archilogic_token = get_user(db, by_id=user.id).archilogic_secret_token
     resp = requests.get(f'https://api.archilogic.com/v2/floor', headers={
         'Authorization': f'AL-Secret-Token {archilogic_token}',
     })

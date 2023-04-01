@@ -8,11 +8,16 @@ import {
 import { me, updateMe } from "../api/auth";
 import { APIUser, APIUserUpdate } from "../api/types";
 
-import { $session } from "./session";
+import { $session, authorized } from "./session";
+import {
+  RouteParams,
+  RouteInstance,
+  RouteParamsAndQuery,
+  chainRoute,
+} from "atomic-router";
 
 const fetchUserFx = createEffect(me);
 
-export const updateAccount = createEvent<APIUserUpdate>();
 const _updateAccountFx = createEffect(
   (params: { session: string; data: APIUserUpdate }) =>
     updateMe(params.session, params.data)
@@ -30,10 +35,23 @@ const sessionChanged = createEvent<string | null>();
 
 export const $user = createStore<APIUser | null>(null);
 
-sample({
-  clock: updateAccount,
-  target: updateAccountFx,
-});
+export const adminOnly = <P extends RouteParams>(route: RouteInstance<P>) => {
+  const userLoadStarted = createEvent<RouteParamsAndQuery<P>>();
+
+  const alreadyAuthorized = sample({
+    clock: userLoadStarted,
+    filter: $user.map((s) => s !== null),
+  });
+
+  const notAnAdmin = $user.map((user) => user !== null && !user?.is_admin);
+
+  return chainRoute({
+    route: authorized(route),
+    beforeOpen: userLoadStarted,
+    openOn: [alreadyAuthorized, fetchUserFx.doneData],
+    cancelOn: [notAnAdmin],
+  });
+};
 
 sample({
   clock: updateAccountFx.doneData,

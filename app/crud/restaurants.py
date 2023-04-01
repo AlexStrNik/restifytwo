@@ -14,7 +14,13 @@ def get_restaurants(db: Session, for_owner: int = None) -> List[RestaurantScheme
     return db.query(Restaurant).all()
 
 def create_restaurant(db: Session, restaurant: RestaurantCreate) -> RestaurantScheme:
-    db_restaurant = Restaurant(name=restaurant.name, about=restaurant.about, floor_id=restaurant.floor_id, owner_id=restaurant.owner_id)
+    db_restaurant = Restaurant(
+        name=restaurant.name, 
+        about=restaurant.about, 
+        floor_id=restaurant.floor_id, 
+        owner_id=restaurant.owner_id,
+        archilogic_token=restaurant.archilogic_token
+    )
     db.add(db_restaurant)
     db.commit()
     db.refresh(db_restaurant)

@@ -15,7 +15,7 @@ import {
 import { Calendar } from "@mantine/dates";
 import { useStore } from "effector-react";
 import { createForm, useForm } from "effector-forms";
-import { chainRoute } from "atomic-router";
+import { chainRoute, redirect } from "atomic-router";
 import dayjs from "dayjs";
 
 import { routes } from "../shared/routes";
@@ -37,6 +37,8 @@ const useStyles = createStyles((theme) => {
   return {
     wrapper: {
       display: "flex",
+      height: "100vh",
+      overflowY: "scroll",
       [BREAKPOINT]: {
         flexDirection: "column",
       },
@@ -121,11 +123,16 @@ const createReservationFx = attach({
 sample({
   clock: reservationSubmit,
   source: reservationForm.$values,
-  fn: (src, clk) => ({
+  fn: (src) => ({
     ...src,
     date: dayjs(src.date).format("YYYY-MM-DD[T]HH:mm"),
   }),
   target: createReservationFx,
+});
+
+redirect({
+  clock: createReservationFx.doneData,
+  route: routes.restaurants.list,
 });
 
 const RestaurantPage = () => {
@@ -133,12 +140,20 @@ const RestaurantPage = () => {
   const theme = useMantineTheme();
 
   const restaurant = useStore($restaurant);
-  const reservations = useStore($reservationsForTable);
+  const reservedDates = useStore(
+    $reservationsForTable.map((reservations) =>
+      reservations?.map((reservation) => reservation.date)
+    )
+  );
   const reservationsLoading = useStore(loadReservationsForTableFx.pending);
+  const reservationPending = useStore(createReservationFx.pending);
   const { fields, eachValid } = useForm(reservationForm);
+
+  console.log(reservedDates);
 
   return (
     <div className={classes.wrapper}>
+      <LoadingOverlay visible={reservationPending} overlayBlur={2} />
       <Stack style={{ flexGrow: 1 }} p="lg" maw={700} pos="relative">
         <Title style={{ marginTop: 0 }} order={1}>
           {restaurant!.name}
@@ -151,7 +166,7 @@ const RestaurantPage = () => {
           floorId={restaurant!.floor_id}
           tableChanged={fields.table.onChange}
         />
-        <Collapse in={reservations != null}>
+        <Collapse in={reservedDates != null}>
           <Stack>
             <SimpleGrid
               cols={2}
@@ -204,6 +219,9 @@ const RestaurantPage = () => {
                         variant={
                           time.isSame(fields.date.value) ? "filled" : "default"
                         }
+                        disabled={reservedDates?.some((date) =>
+                          dayjs(date).isSame(time)
+                        )}
                         onClick={() => fields.date.onChange(time.toDate())}
                       >
                         {time.format("HH:mm")}
@@ -220,6 +238,7 @@ const RestaurantPage = () => {
             </SimpleGrid>
             <Button
               onClick={() => reservationSubmit()}
+              disabled={!eachValid}
               fullWidth
               mt="xl"
               size="md"

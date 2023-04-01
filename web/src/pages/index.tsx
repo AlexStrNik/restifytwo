@@ -6,20 +6,33 @@ import RestaurantsPage from "./RestaurantsPage";
 import AccountPage from "./AccountPage";
 import PreferencesPage from "./PreferencesPage";
 import RestaurantPage from "./RestaurantPage";
+import AdminPage from "./AdminPage";
+import NewRestaurantPage from "./NewRestaurantPage";
 
 export const pagesMap = [
   { path: "/", route: routes.restaurants.list },
   { path: "/restaurants", route: routes.restaurants.list },
-  { path: "/restaurants/:restaurantId", route: routes.restaurants.single },
+  { path: "/restaurants/new", route: routes.restaurants.new },
+  { path: "/restaurants/view/:restaurantId", route: routes.restaurants.single },
   { path: "/reservations", route: routes.reservations.list },
-  { path: "/reservations/:reservationsId", route: routes.reservations.single },
+  {
+    path: "/reservations/view/:reservationsId",
+    route: routes.reservations.single,
+  },
   { path: "/admin", route: routes.admin },
   { path: "/account", route: routes.account },
   { path: "/preferences", route: routes.preferences },
 ];
 
 export const Pages = createRoutesView({
-  routes: [AccountPage, RestaurantsPage, PreferencesPage, RestaurantPage],
+  routes: [
+    AccountPage,
+    RestaurantsPage,
+    PreferencesPage,
+    RestaurantPage,
+    NewRestaurantPage,
+    AdminPage,
+  ],
   otherwise() {
     return (
       <Center style={{ height: "100vh" }}>

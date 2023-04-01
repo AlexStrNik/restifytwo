@@ -10,7 +10,7 @@ import { useEffect, useRef, memo } from "react";
 interface FloorplanProps {
   floorId: string;
   publishableToken: string;
-  tableChanged: (string) => void;
+  tableChanged?: (string) => void;
 }
 
 const makeTheme = (theme: MantineTheme) => ({
@@ -127,33 +127,37 @@ const Floorplan: React.FC<FloorplanProps> = ({
         });
       });
 
-      floorPlan.on("click", ({ pos }) => {
-        let { assets } = floorPlan.getResourcesFromPosition(pos);
+      if (tableChanged !== null) {
+        floorPlan.on("click", ({ pos }) => {
+          let { assets } = floorPlan.getResourcesFromPosition(pos);
 
-        for (let asset of assets) {
-          if (!asset.categories.includes("tables")) continue;
+          for (let asset of assets) {
+            if (!asset.categories.includes("tables")) continue;
 
-          if (selectedTable.current) {
-            selectedTable.current.setHighlight({
+            if (selectedTable.current) {
+              selectedTable.current.setHighlight({
+                fill: toRGBArray(
+                  theme.fn.variant({ variant: "default" }).border!
+                ),
+              });
+            }
+
+            asset.node.setHighlight({
               fill: toRGBArray(
                 theme.fn.variant({ variant: "default" }).border!
               ),
+              outline: toRGBArray(theme.fn.themeColor(theme.primaryColor)),
+              outlineWidth: 2,
             });
+            floorPlan.zoomToElement(asset.node, 2, 250);
+            selectedTable.current = asset.node;
+
+            tableChanged(asset.id);
+
+            return;
           }
-
-          asset.node.setHighlight({
-            fill: toRGBArray(theme.fn.variant({ variant: "default" }).border!),
-            outline: toRGBArray(theme.fn.themeColor(theme.primaryColor)),
-            outlineWidth: 2,
-          });
-          floorPlan.zoomToElement(asset.node, 2, 250);
-          selectedTable.current = asset.node;
-
-          tableChanged(asset.id);
-
-          return;
-        }
-      });
+        });
+      }
     });
   }, [ref.current, theme]);
 

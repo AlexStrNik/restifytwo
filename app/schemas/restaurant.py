@@ -6,7 +6,6 @@ class RestaurantBase(BaseModel):
     name: str
     about: str
     floor_id: str
-    archilogic_token: str
 
 
 class APIRestaurantCreate(RestaurantBase):
@@ -15,11 +14,13 @@ class APIRestaurantCreate(RestaurantBase):
 
 class RestaurantCreate(APIRestaurantCreate):
     owner_id: int
+    archilogic_token: str
     pass
 
 
 class APIRestaurant(RestaurantBase):
     id: int
+    archilogic_token: str
 
     class Config:
         orm_mode = True
