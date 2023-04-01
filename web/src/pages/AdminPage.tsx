@@ -3,7 +3,6 @@ import {
   Image,
   Text,
   Button,
-  useMantineTheme,
   Stack,
   SimpleGrid,
   Title,
@@ -19,8 +18,6 @@ import { routes } from "../shared/routes";
 import { adminOnly } from "../models/user";
 
 export const AdminPage = () => {
-  const theme = useMantineTheme();
-
   const restaurants = useList($myRestaurants, (restaurant: APIRestaurant) => (
     <Card
       shadow="sm"

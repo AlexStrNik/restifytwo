@@ -30,4 +30,7 @@ export const createReservationFx = attach({
 
 export const $restaurants = restore(loadRestaurantsFx, []);
 export const $restaurant = restore(loadRestaurantFx, null);
-export const $reservationsForTable = restore(loadReservationsForTableFx, null);
+export const $reservationsForTable = restore(
+  loadReservationsForTableFx,
+  null
+).reset(createReservationFx.done);

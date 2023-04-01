@@ -37,7 +37,6 @@ def register(creds: APIUserRegister, db: Session = Depends(get_db)):
 
 @router.get('/me', response_model=APIUser)
 def me(user: JWTUser = Depends(get_user_from_token), db: Session = Depends(get_db)):
-
     return get_user(db, by_id=user.id)
 
 @router.post('/me', response_model=APIUser)

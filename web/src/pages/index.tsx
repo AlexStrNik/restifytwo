@@ -8,6 +8,7 @@ import PreferencesPage from "./PreferencesPage";
 import RestaurantPage from "./RestaurantPage";
 import AdminPage from "./AdminPage";
 import NewRestaurantPage from "./NewRestaurantPage";
+import ReservationsPage from "./ReservationsPage";
 
 export const pagesMap = [
   { path: "/", route: routes.restaurants.list },
@@ -32,6 +33,7 @@ export const Pages = createRoutesView({
     RestaurantPage,
     NewRestaurantPage,
     AdminPage,
+    ReservationsPage,
   ],
   otherwise() {
     return (

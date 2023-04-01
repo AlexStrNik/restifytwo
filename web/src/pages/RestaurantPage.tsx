@@ -130,6 +130,11 @@ sample({
   target: createReservationFx,
 });
 
+sample({
+  clock: createReservationFx.doneData,
+  target: reservationForm.reset,
+});
+
 redirect({
   clock: createReservationFx.doneData,
   route: routes.restaurants.list,
@@ -140,16 +145,10 @@ const RestaurantPage = () => {
   const theme = useMantineTheme();
 
   const restaurant = useStore($restaurant);
-  const reservedDates = useStore(
-    $reservationsForTable.map((reservations) =>
-      reservations?.map((reservation) => reservation.date)
-    )
-  );
+  const reservedDates = useStore($reservationsForTable);
   const reservationsLoading = useStore(loadReservationsForTableFx.pending);
   const reservationPending = useStore(createReservationFx.pending);
   const { fields, eachValid } = useForm(reservationForm);
-
-  console.log(reservedDates);
 
   return (
     <div className={classes.wrapper}>
@@ -219,8 +218,8 @@ const RestaurantPage = () => {
                         variant={
                           time.isSame(fields.date.value) ? "filled" : "default"
                         }
-                        disabled={reservedDates?.some((date) =>
-                          dayjs(date).isSame(time)
+                        disabled={reservedDates?.some((reservation) =>
+                          dayjs(reservation.date).isSame(time)
                         )}
                         onClick={() => fields.date.onChange(time.toDate())}
                       >

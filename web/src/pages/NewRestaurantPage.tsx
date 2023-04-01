@@ -59,6 +59,11 @@ sample({
   target: createRestaurantFx,
 });
 
+sample({
+  clock: createRestaurantFx.doneData,
+  target: restaurantForm.reset,
+});
+
 redirect({
   clock: createRestaurantFx.doneData,
   route: routes.admin,
