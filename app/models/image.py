@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from ..database import Base
 
 
-class RestaurantImage(Base):
+class Image(Base):
     __tablename__ = 'images'
 
     id = Column(Integer, primary_key=True, index=True)

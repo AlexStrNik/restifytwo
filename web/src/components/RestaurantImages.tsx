@@ -35,7 +35,7 @@ const RestaurantImages: React.FC<RestaurantImagesProps> = ({
   return (
     <Carousel height={height} mx="auto" withIndicators>
       {images.map((image) => (
-        <Carousel.Slide>
+        <Carousel.Slide key={`slide-${image.id}`}>
           <Image src={uploads(image.path)} />
         </Carousel.Slide>
       ))}

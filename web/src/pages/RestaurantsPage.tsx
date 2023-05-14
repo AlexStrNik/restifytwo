@@ -17,6 +17,7 @@ import { $restaurants, loadRestaurantsFx } from "../models/restaurants";
 import { APIRestaurantFull } from "../api/types";
 import { routes } from "../shared/routes";
 import RestaurantImages from "../components/RestaurantImages";
+import RestaurantRating from "../components/RestaurantRating";
 
 const RestaurantsPage = () => {
   const theme = useMantineTheme();
@@ -36,12 +37,7 @@ const RestaurantsPage = () => {
 
       <Group position="apart" mt="md" mb="xs">
         <Text weight={500}>{restaurant.name}</Text>
-        <Rating
-          color={theme.primaryColor}
-          defaultValue={3.45}
-          readOnly
-          fractions={2}
-        />
+        <RestaurantRating reviews={restaurant.reviews} />
       </Group>
 
       <Text style={{ flexGrow: 1 }} size="sm" color="dimmed" lineClamp={4}>

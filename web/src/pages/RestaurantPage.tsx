@@ -11,6 +11,9 @@ import {
   SimpleGrid,
   Collapse,
   LoadingOverlay,
+  Group,
+  Rating,
+  ScrollArea,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { useStore } from "effector-react";
@@ -31,6 +34,9 @@ import { attach, createEvent, forward, sample } from "effector";
 import { GuestsInput } from "../components/GuestsInput";
 import { APIReservationCreate } from "../api/types";
 import RestaurantImages from "../components/RestaurantImages";
+import ReviewForm from "../components/ReviewForm";
+import RestaurantRating from "../components/RestaurantRating";
+import RestaurantReviews from "../components/RestaurantReviews";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("lg");
@@ -94,6 +100,7 @@ const reservationForm = createForm({
       ],
     },
   },
+  validateOn: ["change"],
 });
 
 const loadReservationsForTableFx = attach({
@@ -154,13 +161,23 @@ const RestaurantPage = () => {
   return (
     <div className={classes.wrapper}>
       <LoadingOverlay visible={reservationPending} overlayBlur={2} />
-      <Stack style={{ flexGrow: 1 }} p="lg" maw={700} pos="relative">
-        <RestaurantImages images={restaurant!.images} height={320} />
-        <Title style={{ marginTop: 0 }} order={1}>
-          {restaurant!.name}
-        </Title>
-        <Text>{restaurant!.about}</Text>
-      </Stack>
+      <ScrollArea>
+        <Stack style={{ flexGrow: 1 }} p="lg" maw={700} pos="relative">
+          <RestaurantImages images={restaurant!.images} height={320} />
+          <Group position="apart" mt="md" mb="xs">
+            <Title style={{ marginTop: 0 }} order={1}>
+              {restaurant!.name}
+            </Title>
+            <RestaurantRating reviews={restaurant!.reviews} />
+          </Group>
+
+          <Text>{restaurant!.about}</Text>
+
+          <RestaurantReviews restaurant={restaurant!} />
+
+          <ReviewForm restaurant={restaurant!} />
+        </Stack>
+      </ScrollArea>
       <Stack style={{ flexGrow: 1 }} maw={700} className={classes.aside} p="lg">
         <Floorplan
           publishableToken={restaurant!.archilogic_token}

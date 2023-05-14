@@ -1,7 +1,8 @@
 from typing import List
 from pydantic import BaseModel
 
-from .image import RestaurantImage
+from .image import Image
+from .review import APIReviewLight, Review
 
 
 class RestaurantBase(BaseModel):
@@ -33,9 +34,9 @@ class Restaurant(APIRestaurant):
 
 
 class APIRestaurantFull(APIRestaurant):
-    images: List[RestaurantImage]
+    images: List[Image]
+    reviews: List[APIReviewLight]
 
 
 class RestaurantFull(APIRestaurant):
     owner_id: int
-

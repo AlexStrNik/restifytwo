@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class RestaurantImage(BaseModel):
+class Image(BaseModel):
     id: int
     path: str
 

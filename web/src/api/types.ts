@@ -39,6 +39,7 @@ export interface APIRestaurantImage {
 
 export interface APIRestaurantFull extends APIRestaurant {
   images: APIRestaurantImage[];
+  reviews: APIReviewLight[];
 }
 
 export interface APIRestaurantCreate {
@@ -68,6 +69,26 @@ export interface APIReservationCreate {
   table: string;
   guests_count: number;
   date: string;
+}
+
+export interface APIReviewLight {
+  rating: number;
+}
+
+export interface APIReviewAuthor {
+  name: string;
+}
+
+export interface APIReview {
+  id: number;
+  author: APIReviewAuthor;
+  review: string;
+  rating: number;
+}
+
+export interface APIReviewCreate {
+  review: string;
+  rating: number;
 }
 
 export type { FileWithPath } from "@mantine/dropzone";

@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 
-from ..models.image import RestaurantImage
+from ..models.image import Image
 
 def create_image(db: Session, path: str, restaurant_id: int):
-    db_image = RestaurantImage(
+    db_image = Image(
         path=path,
         restaurant_id=restaurant_id,
     )
