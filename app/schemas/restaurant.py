@@ -1,5 +1,7 @@
-from datetime import date
+from typing import List
 from pydantic import BaseModel
+
+from .image import RestaurantImage
 
 
 class RestaurantBase(BaseModel):
@@ -28,3 +30,12 @@ class APIRestaurant(RestaurantBase):
 
 class Restaurant(APIRestaurant):
     owner_id: int
+
+
+class APIRestaurantFull(APIRestaurant):
+    images: List[RestaurantImage]
+
+
+class RestaurantFull(APIRestaurant):
+    owner_id: int
+

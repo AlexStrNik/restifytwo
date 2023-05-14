@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from ..database import Base
 
+from .image import RestaurantImage
 
 class Restaurant(Base):
     __tablename__ = 'restaurants'
@@ -17,3 +18,4 @@ class Restaurant(Base):
     owner = relationship('User', back_populates='owned_restaurants')
     reservations = relationship('Reservation', back_populates='restaurant')
 
+    images = relationship('RestaurantImage')

@@ -1,6 +1,5 @@
 import {
   Card,
-  Image,
   Text,
   Button,
   Stack,
@@ -13,45 +12,45 @@ import { chainRoute } from "atomic-router";
 import { useList } from "effector-react";
 
 import { $myRestaurants, loadRestaurantsFx } from "../models/admin";
-import { APIRestaurant } from "../api/types";
+import { APIRestaurantFull } from "../api/types";
 import { routes } from "../shared/routes";
 import { adminOnly } from "../models/user";
+import RestaurantImages from "../components/RestaurantImages";
 
 export const AdminPage = () => {
-  const restaurants = useList($myRestaurants, (restaurant: APIRestaurant) => (
-    <Card
-      shadow="sm"
-      padding="xs"
-      radius="md"
-      withBorder
-      display="flex"
-      style={{ flexDirection: "column" }}
-    >
-      <Card.Section>
-        <Image
-          src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-          height={160}
-          alt="Norway"
-        />
-      </Card.Section>
-
-      <Text weight={500}>{restaurant.name}</Text>
-
-      <Text style={{ flexGrow: 1 }} size="sm" color="dimmed" lineClamp={4}>
-        {restaurant.about}
-      </Text>
-
-      <Link
-        to={routes.restaurants.single}
-        params={{ restaurantId: restaurant.id }}
-        style={{ display: "contents" }}
+  const restaurants = useList(
+    $myRestaurants,
+    (restaurant: APIRestaurantFull) => (
+      <Card
+        shadow="sm"
+        padding="xs"
+        radius="md"
+        withBorder
+        display="flex"
+        style={{ flexDirection: "column" }}
       >
-        <Button variant="light" fullWidth mt="md" radius="md">
-          Edit
-        </Button>
-      </Link>
-    </Card>
-  ));
+        <Card.Section mb="xs">
+          <RestaurantImages images={restaurant.images} />
+        </Card.Section>
+
+        <Text weight={500}>{restaurant.name}</Text>
+
+        <Text style={{ flexGrow: 1 }} size="sm" color="dimmed" lineClamp={4}>
+          {restaurant.about}
+        </Text>
+
+        <Link
+          to={routes.restaurants.single}
+          params={{ restaurantId: restaurant.id }}
+          style={{ display: "contents" }}
+        >
+          <Button variant="light" fullWidth mt="md" radius="md">
+            Edit
+          </Button>
+        </Link>
+      </Card>
+    )
+  );
 
   return (
     <Stack p="lg">

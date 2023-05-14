@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   Group,
-  Image,
   Rating,
   SimpleGrid,
   Stack,
@@ -15,13 +14,14 @@ import {
 } from "@mantine/core";
 
 import { $restaurants, loadRestaurantsFx } from "../models/restaurants";
-import { APIRestaurant } from "../api/types";
+import { APIRestaurantFull } from "../api/types";
 import { routes } from "../shared/routes";
+import RestaurantImages from "../components/RestaurantImages";
 
 const RestaurantsPage = () => {
   const theme = useMantineTheme();
 
-  const restaurants = useList($restaurants, (restaurant: APIRestaurant) => (
+  const restaurants = useList($restaurants, (restaurant: APIRestaurantFull) => (
     <Card
       shadow="sm"
       padding="xs"
@@ -31,11 +31,7 @@ const RestaurantsPage = () => {
       style={{ flexDirection: "column" }}
     >
       <Card.Section>
-        <Image
-          src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-          height={160}
-          alt="Norway"
-        />
+        <RestaurantImages images={restaurant.images} />
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">

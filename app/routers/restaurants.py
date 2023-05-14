@@ -5,18 +5,18 @@ from sqlalchemy.orm import Session
 from app.schemas.auth import JWTUser
 
 from ..dependencies import get_db, get_user_from_token
-from ..schemas.restaurant import APIRestaurant
+from ..schemas.restaurant import APIRestaurantFull
 from ..schemas.reservation import APIReservation, APIReservationCreate, ReservationCreate
 from ..crud.restaurants import get_restaurant, get_restaurants
 from ..crud.reservations import create_reservation, get_reservations
 
 router = APIRouter(prefix='/api/restaurants')
 
-@router.get('/', response_model=List[APIRestaurant])
+@router.get('/', response_model=List[APIRestaurantFull])
 def list_restaurants(db: Session = Depends(get_db)):
     return get_restaurants(db)
 
-@router.get('/{restaurant_id}', response_model=APIRestaurant)
+@router.get('/{restaurant_id}', response_model=APIRestaurantFull)
 def list_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
     return get_restaurant(db, by_id=restaurant_id)
 

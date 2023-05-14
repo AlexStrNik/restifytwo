@@ -2,7 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from ..models.restaurant import Restaurant
-from ..schemas.restaurant import RestaurantCreate, Restaurant as RestaurantScheme
+from ..schemas.restaurant import RestaurantCreate, RestaurantFull as RestaurantScheme
 
 def get_restaurant(db: Session, by_id: int) -> RestaurantScheme:
     return db.query(Restaurant).filter(Restaurant.id == by_id).first()

@@ -1,3 +1,7 @@
+export interface ApiOk {
+  status: "ok";
+}
+
 export interface APIUserSign {
   email: string;
   password: string;
@@ -28,6 +32,15 @@ export interface APIRestaurant {
   archilogic_token: string;
 }
 
+export interface APIRestaurantImage {
+  id: number;
+  path: string;
+}
+
+export interface APIRestaurantFull extends APIRestaurant {
+  images: APIRestaurantImage[];
+}
+
 export interface APIRestaurantCreate {
   name: string;
   about: string;
@@ -56,3 +69,5 @@ export interface APIReservationCreate {
   guests_count: number;
   date: string;
 }
+
+export type { FileWithPath } from "@mantine/dropzone";

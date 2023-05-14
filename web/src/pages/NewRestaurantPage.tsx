@@ -1,11 +1,3 @@
-import { createForm, useForm } from "effector-forms";
-import { chainRoute, redirect } from "atomic-router";
-import { useStore } from "effector-react";
-
-import { routes } from "../shared/routes";
-import { $user, adminOnly } from "../models/user";
-import { createRestaurantFx } from "../models/admin";
-import { $myFloors, loadFloorsFx } from "../models/archilogic";
 import {
   Button,
   LoadingOverlay,
@@ -15,12 +7,22 @@ import {
   Textarea,
   Title,
 } from "@mantine/core";
-import Floorplan from "../components/Floorplan";
 import { createEvent, sample } from "effector";
-import { APIRestaurantCreate } from "../api/types";
+import { createForm, useForm } from "effector-forms";
+import { chainRoute, redirect } from "atomic-router";
+import { useStore } from "effector-react";
+
+import { routes } from "../shared/routes";
+import { $user, adminOnly } from "../models/user";
+import { createRestaurantFx, uploadRestaurantImagesFx } from "../models/admin";
+import { $myFloors, loadFloorsFx } from "../models/archilogic";
+import Floorplan from "../components/Floorplan";
+import { APIRestaurantCreate, FileWithPath } from "../api/types";
+import ImageInput from "../components/ImageInput";
 
 type FormFields = Omit<APIRestaurantCreate, "floor_id"> & {
   floor_id: string | null;
+  images: FileWithPath[];
 };
 
 const restaurantForm = createForm<FormFields>({
@@ -43,6 +45,9 @@ const restaurantForm = createForm<FormFields>({
         },
       ],
     },
+    images: {
+      init: [],
+    },
     about: {
       init: "",
     },
@@ -61,11 +66,18 @@ sample({
 
 sample({
   clock: createRestaurantFx.doneData,
+  source: restaurantForm.fields.images.$value,
+  fn: (images, restaurant) => ({ restaurant, images }),
+  target: uploadRestaurantImagesFx,
+});
+
+sample({
+  clock: uploadRestaurantImagesFx.doneData,
   target: restaurantForm.reset,
 });
 
 redirect({
-  clock: createRestaurantFx.doneData,
+  clock: uploadRestaurantImagesFx.doneData,
   route: routes.admin,
 });
 
@@ -89,6 +101,11 @@ export const NewRestaurantPage = () => {
           required: "name required",
         })}
       />
+      <ImageInput
+        value={fields.images.value}
+        label={"Restaurant images"}
+        onChange={fields.images.onChange}
+      />
       <Select
         name="floorplan"
         label="Restaurant floorplan"
@@ -104,10 +121,12 @@ export const NewRestaurantPage = () => {
         }))}
       />
       {fields.floor_id.value && (
-        <Floorplan
-          publishableToken={user!.archilogic_public_token}
-          floorId={fields.floor_id.value}
-        />
+        <div style={{ pointerEvents: "none" }}>
+          <Floorplan
+            publishableToken={user!.archilogic_public_token}
+            floorId={fields.floor_id.value}
+          />
+        </div>
       )}
       <Textarea
         autosize

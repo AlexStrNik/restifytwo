@@ -1,9 +1,14 @@
 import { get, post } from "./helpers";
-import { APIReservation, APIReservationCreate, APIRestaurant } from "./types";
+import {
+  APIReservation,
+  APIReservationCreate,
+  APIRestaurantFull,
+} from "./types";
 
-export const restaurants = (): Promise<APIRestaurant[]> => get("/restaurants");
+export const restaurants = (): Promise<APIRestaurantFull[]> =>
+  get("/restaurants");
 
-export const restaurant = (id: number): Promise<APIRestaurant> =>
+export const restaurant = (id: number): Promise<APIRestaurantFull> =>
   get(`/restaurants/${id}`);
 
 export const reservations = (
