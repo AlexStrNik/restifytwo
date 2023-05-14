@@ -30,6 +30,7 @@ import {
 import { attach, createEvent, forward, sample } from "effector";
 import { GuestsInput } from "../components/GuestsInput";
 import { APIReservationCreate } from "../api/types";
+import RestaurantImages from "../components/RestaurantImages";
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("lg");
@@ -154,6 +155,7 @@ const RestaurantPage = () => {
     <div className={classes.wrapper}>
       <LoadingOverlay visible={reservationPending} overlayBlur={2} />
       <Stack style={{ flexGrow: 1 }} p="lg" maw={700} pos="relative">
+        <RestaurantImages images={restaurant!.images} height={320} />
         <Title style={{ marginTop: 0 }} order={1}>
           {restaurant!.name}
         </Title>

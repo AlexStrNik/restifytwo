@@ -27,8 +27,7 @@ def add_restaraunt(restaraunt: APIRestaurantCreate, user: JWTUser = Depends(get_
     if not user.is_admin:
         raise HTTPException(403, 'Admin only')
 
-    archilogic_token = get_user(db, by_id=user.id).archilogic_secret_token
-    print(archilogic_token)
+    archilogic_token = get_user(db, by_id=user.id).archilogic_public_token
     restaraunt = RestaurantCreate(
         name=restaraunt.name, 
         about=restaraunt.about, 

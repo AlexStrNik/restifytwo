@@ -45,7 +45,7 @@ export const AdminPage = () => {
           style={{ display: "contents" }}
         >
           <Button variant="light" fullWidth mt="md" radius="md">
-            Edit
+            Reservations
           </Button>
         </Link>
       </Card>

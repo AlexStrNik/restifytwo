@@ -17,9 +17,13 @@ import { Carousel } from "@mantine/carousel";
 
 interface RestaurantImagesProps {
   images: APIRestaurantImage[];
+  height?: number;
 }
 
-const RestaurantImages: React.FC<RestaurantImagesProps> = ({ images }) => {
+const RestaurantImages: React.FC<RestaurantImagesProps> = ({
+  images,
+  height = 160,
+}) => {
   if (images.length == 0) {
     return (
       <Center style={{ height: 160 }}>
@@ -29,7 +33,7 @@ const RestaurantImages: React.FC<RestaurantImagesProps> = ({ images }) => {
   }
 
   return (
-    <Carousel height={160} mx="auto" withIndicators>
+    <Carousel height={height} mx="auto" withIndicators>
       {images.map((image) => (
         <Carousel.Slide>
           <Image src={uploads(image.path)} />
