@@ -63,7 +63,7 @@ const ReviewForm: React.FC<FeedbackFormProps> = ({ restaurant }) => {
   const { fields, eachValid } = useForm(reviewForm);
 
   return (
-    <Stack style={{ position: "relative" }}>
+    <Stack mt="md" style={{ position: "relative" }}>
       <LoadingOverlay visible={loading} />
       <Textarea
         autosize

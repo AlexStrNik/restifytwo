@@ -47,7 +47,7 @@ const RestaurantReviews: React.FC<RestaurantReviewsProps> = ({
 
   const reviews = useList($reviewsForRestaurant, {
     fn: (review: APIReview) => (
-      <Paper key={review.id} shadow="sm" radius="md" p="md" withBorder>
+      <Paper mt="xs" key={review.id} shadow="sm" radius="md" p="md" withBorder>
         <Group position="apart" mb="xs">
           <Title className={classes.textWithIcon} order={3}>
             <IconUser /> {review.author.name}

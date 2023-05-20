@@ -1,8 +1,8 @@
 import {
   Button,
   LoadingOverlay,
+  ScrollArea,
   Select,
-  Stack,
   TextInput,
   Textarea,
   Title,
@@ -88,7 +88,7 @@ export const NewRestaurantPage = () => {
   const { fields, eachValid } = useForm(restaurantForm);
 
   return (
-    <Stack p="lg" maw={700}>
+    <ScrollArea p="lg" maw={700}>
       <LoadingOverlay visible={loading} overlayBlur={2} />
       <Title order={1}>New restaurant</Title>
       <TextInput
@@ -146,7 +146,7 @@ export const NewRestaurantPage = () => {
       >
         Create Restaurant
       </Button>
-    </Stack>
+    </ScrollArea>
   );
 };
 
