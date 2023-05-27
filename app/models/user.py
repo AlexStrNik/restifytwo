@@ -12,6 +12,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
     name = Column(String)
+    phone = Column(String)
     hashed_password = Column(String)
     archilogic_secret_token = Column(String)
     archilogic_public_token = Column(String)

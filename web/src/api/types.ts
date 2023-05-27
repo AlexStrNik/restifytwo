@@ -15,6 +15,7 @@ export interface APIUser {
   id: number;
   email: string;
   name: string;
+  phone: string;
   is_admin: boolean;
   archilogic_secret_token: string;
   archilogic_public_token: string;
@@ -48,7 +49,8 @@ export interface APIRestaurantCreate {
   floor_id: string;
 }
 
-export interface APIUserUpdate extends Partial<APIUser> {}
+export interface APIUserUpdate
+  extends Omit<Partial<APIUser>, "id" | "is_admin"> {}
 
 export interface APIFloor {
   id: string;

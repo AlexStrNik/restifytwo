@@ -18,6 +18,9 @@ const accountForm = createForm({
         },
       ],
     },
+    phone: {
+      init: "",
+    },
     archilogic_secret_token: {
       init: "",
       rules: [
@@ -68,7 +71,7 @@ const AccountPage = () => {
       <Title order={1}>Account settings</Title>
       <TextInput
         name="name"
-        placeholder="User name"
+        placeholder="Mr. Smith"
         label="Name"
         value={fields.name.value}
         onChange={(e) => fields.name.onChange(e.target.value)}
@@ -77,14 +80,20 @@ const AccountPage = () => {
         })}
       />
 
+      <TextInput
+        name="phone"
+        placeholder="Phone number"
+        label="Phone number"
+        value={fields.phone.value}
+        onChange={(e) => fields.phone.onChange(e.target.value)}
+      />
+
       {user?.is_admin && (
         <>
           <TextInput
             name="archilogic_secret_token"
             placeholder="User token"
             label="Archilogic Token (Secret)"
-            size="md"
-            mt="md"
             value={fields.archilogic_secret_token.value}
             onChange={(e) =>
               fields.archilogic_secret_token.onChange(e.target.value)
@@ -97,8 +106,6 @@ const AccountPage = () => {
             name="archilogic_public_token"
             placeholder="User token"
             label="Archilogic Token (Public)"
-            size="md"
-            mt="md"
             value={fields.archilogic_public_token.value}
             onChange={(e) =>
               fields.archilogic_public_token.onChange(e.target.value)
