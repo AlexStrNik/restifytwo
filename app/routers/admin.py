@@ -29,9 +29,7 @@ def add_restaraunt(restaraunt: APIRestaurantCreate, user: JWTUser = Depends(get_
 
     archilogic_token = get_user(db, by_id=user.id).archilogic_public_token
     restaraunt = RestaurantCreate(
-        name=restaraunt.name, 
-        about=restaraunt.about, 
-        floor_id=restaraunt.floor_id, 
+        **restaraunt.dict(),
         owner_id=user.id, 
         archilogic_token=archilogic_token
     )

@@ -3,6 +3,7 @@ import {
   LoadingOverlay,
   ScrollArea,
   Select,
+  Stack,
   TextInput,
   Textarea,
   Title,
@@ -19,6 +20,7 @@ import { $myFloors, loadFloorsFx } from "../models/archilogic";
 import Floorplan from "../components/Floorplan";
 import { APIRestaurantCreate, FileWithPath } from "../api/types";
 import ImageInput from "../components/ImageInput";
+import AddressInput from "../components/AddressInput";
 
 type FormFields = Omit<APIRestaurantCreate, "floor_id"> & {
   floor_id: string | null;
@@ -38,6 +40,15 @@ const restaurantForm = createForm<FormFields>({
     },
     floor_id: {
       init: null,
+      rules: [
+        {
+          name: "required",
+          validator: (value: string | null) => Boolean(value),
+        },
+      ],
+    },
+    address: {
+      init: "",
       rules: [
         {
           name: "required",
@@ -89,63 +100,78 @@ export const NewRestaurantPage = () => {
 
   return (
     <ScrollArea p="lg" maw={700}>
-      <LoadingOverlay visible={loading} overlayBlur={2} />
-      <Title order={1}>New restaurant</Title>
-      <TextInput
-        name="name"
-        placeholder="Restaurant name"
-        label="Name"
-        value={fields.name.value}
-        onChange={(e) => fields.name.onChange(e.target.value)}
-        error={fields.name.errorText({
-          required: "name required",
-        })}
-      />
-      <ImageInput
-        value={fields.images.value}
-        label={"Restaurant images"}
-        onChange={fields.images.onChange}
-      />
-      <Select
-        name="floorplan"
-        label="Restaurant floorplan"
-        placeholder="Pick floorplan"
-        value={fields.floor_id.value}
-        onChange={fields.floor_id.onChange}
-        error={fields.name.errorText({
-          required: "floorplan required",
-        })}
-        data={floors.map((floor) => ({
-          label: floor.name,
-          value: floor.id,
-        }))}
-      />
-      {fields.floor_id.value && (
-        <div style={{ pointerEvents: "none" }}>
-          <Floorplan
-            publishableToken={user!.archilogic_public_token}
-            floorId={fields.floor_id.value}
-          />
-        </div>
-      )}
-      <Textarea
-        autosize
-        name="about"
-        placeholder="Restaurant description"
-        label="Description"
-        value={fields.about.value}
-        onChange={(e) => fields.about.onChange(e.target.value)}
-      />
+      <Stack>
+        <LoadingOverlay visible={loading} overlayBlur={2} />
+        <Title order={1}>New restaurant</Title>
+        <TextInput
+          name="name"
+          placeholder="Restaurant name"
+          label="Name"
+          value={fields.name.value}
+          onChange={(e) => fields.name.onChange(e.target.value)}
+          error={fields.name.errorText({
+            required: "name required",
+          })}
+        />
 
-      <Button
-        fullWidth
-        mt="xl"
-        size="md"
-        onClick={() => restaurantSubmit()}
-        disabled={!eachValid}
-      >
-        Create Restaurant
-      </Button>
+        <AddressInput
+          name="address"
+          placeholder="Restaurant address"
+          label="Address"
+          value={fields.address.value}
+          onChange={fields.address.onChange}
+          error={fields.address.errorText({
+            required: "address required",
+          })}
+        />
+
+        <ImageInput
+          value={fields.images.value}
+          label={"Restaurant images"}
+          onChange={fields.images.onChange}
+        />
+
+        <Select
+          name="floorplan"
+          label="Restaurant floorplan"
+          placeholder="Pick floorplan"
+          value={fields.floor_id.value}
+          onChange={fields.floor_id.onChange}
+          error={fields.floor_id.errorText({
+            required: "floorplan required",
+          })}
+          data={floors.map((floor) => ({
+            label: floor.name,
+            value: floor.id,
+          }))}
+        />
+        {fields.floor_id.value && (
+          <div style={{ pointerEvents: "none" }}>
+            <Floorplan
+              publishableToken={user!.archilogic_public_token}
+              floorId={fields.floor_id.value}
+            />
+          </div>
+        )}
+        <Textarea
+          autosize
+          name="about"
+          placeholder="Restaurant description"
+          label="Description"
+          value={fields.about.value}
+          onChange={(e) => fields.about.onChange(e.target.value)}
+        />
+
+        <Button
+          fullWidth
+          mt="xl"
+          size="md"
+          onClick={() => restaurantSubmit()}
+          disabled={!eachValid}
+        >
+          Create Restaurant
+        </Button>
+      </Stack>
     </ScrollArea>
   );
 };

@@ -7,6 +7,7 @@ from .review import APIReviewLight, Review
 
 class RestaurantBase(BaseModel):
     name: str
+    address: str
     about: str
     floor_id: str
 

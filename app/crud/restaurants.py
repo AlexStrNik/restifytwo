@@ -17,6 +17,7 @@ def create_restaurant(db: Session, restaurant: RestaurantCreate) -> RestaurantSc
     db_restaurant = Restaurant(
         name=restaurant.name, 
         about=restaurant.about, 
+        address=restaurant.address,
         floor_id=restaurant.floor_id, 
         owner_id=restaurant.owner_id,
         archilogic_token=restaurant.archilogic_token

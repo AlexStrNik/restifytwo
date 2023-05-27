@@ -11,6 +11,7 @@ class Restaurant(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
+    address = Column(String, nullable=False)
     about = Column(String)
     floor_id = Column(String)
     archilogic_token = Column(String)

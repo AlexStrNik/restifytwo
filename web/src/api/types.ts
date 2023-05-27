@@ -29,6 +29,7 @@ export interface APIRestaurant {
   id: number;
   name: string;
   about: string;
+  address: string;
   floor_id: string;
   archilogic_token: string;
 }
@@ -47,6 +48,7 @@ export interface APIRestaurantCreate {
   name: string;
   about: string;
   floor_id: string;
+  address: string;
 }
 
 export interface APIUserUpdate
@@ -91,6 +93,12 @@ export interface APIReview {
 export interface APIReviewCreate {
   review: string;
   rating: number;
+}
+
+export interface APIPlacesItem {
+  name: string;
+  description: string;
+  id: string;
 }
 
 export type { FileWithPath } from "@mantine/dropzone";

@@ -1,4 +1,13 @@
-import { Text, Title, Group, ScrollArea, Button, Modal } from "@mantine/core";
+import {
+  Text,
+  Title,
+  Group,
+  ScrollArea,
+  Button,
+  Modal,
+  Box,
+  Paper,
+} from "@mantine/core";
 import { useStore } from "effector-react";
 import { chainRoute } from "atomic-router";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,6 +20,7 @@ import {
   loadRestaurantFx,
 } from "../models/restaurants";
 import RestaurantImages from "../components/RestaurantImages";
+import Map from "../components/Map";
 import ReviewForm from "../forms/ReviewForm";
 import RestaurantRating from "../components/RestaurantRating";
 import RestaurantReviews from "../components/RestaurantReviews";
@@ -31,7 +41,14 @@ const RestaurantPage = () => {
         <ReservationForm restaurant={restaurant!} />
       </Modal>
       <ScrollArea p="lg" maw={700} pos="relative">
-        <RestaurantImages images={restaurant!.images} height={320} />
+        <Paper
+          shadow="sm"
+          radius="md"
+          withBorder
+          style={{ overflow: "hidden" }}
+        >
+          <RestaurantImages images={restaurant!.images} height={320} />
+        </Paper>
         <Group position="apart" mt="md" mb="xs">
           <Title style={{ marginTop: 0 }} order={1}>
             {restaurant!.name}
@@ -44,6 +61,10 @@ const RestaurantPage = () => {
         </Button>
 
         <Text>{restaurant!.about}</Text>
+
+        <Box mt="xs">
+          <Map address={restaurant!.address} />
+        </Box>
 
         <RestaurantReviews restaurant={restaurant!} />
 
