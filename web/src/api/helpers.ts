@@ -59,6 +59,40 @@ export const upload = (
   );
 };
 
+export const download = (
+  pathComponent: string,
+  session?: string
+): Promise<void> => {
+  return delayed(
+    fetch(`${API_URL}${pathComponent}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    }).then(async (res) => {
+      if (res.status !== 200) {
+        throw await res.json();
+      }
+
+      let filename = "";
+      const disposition = res.headers.get("Content-Disposition")!;
+      filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
+      if (filename.toLowerCase().startsWith("utf-8''"))
+        filename = decodeURIComponent(filename.replace(/utf-8''/i, ""));
+      else filename = filename.replace(/['"]/g, "");
+
+      const blob = await res.blob();
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    })
+  );
+};
+
 export const uploads = (file_name: string) => `${UPLOADS_URL}/${file_name}`;
 
 export const get = <T0>(

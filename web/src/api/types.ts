@@ -69,11 +69,14 @@ export interface APIFloor {
 
 export interface APIReservation {
   id: number;
-  guest_id?: number;
   table_id: string;
   restaurant: APIRestaurant;
   guests_count: number;
   date: string;
+}
+
+export interface APIReservationAdmin extends APIReservation {
+  guest: APIUser;
 }
 
 export interface APIReservationCreate {

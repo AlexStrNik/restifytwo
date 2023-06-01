@@ -40,7 +40,7 @@ export const AdminPage = () => {
         </Text>
 
         <Link
-          to={routes.restaurants.single}
+          to={routes.restaurants.reservations}
           params={{ restaurantId: restaurant.id }}
           style={{ display: "contents" }}
         >

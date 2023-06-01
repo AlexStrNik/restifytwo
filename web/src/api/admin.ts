@@ -1,5 +1,7 @@
-import { get, post, upload } from "./helpers";
+import { download, get, post, upload } from "./helpers";
+import { API_URL } from "./constants";
 import {
+  APIReservationAdmin,
   APIRestaurant,
   APIRestaurantCreate,
   APIRestaurantFull,
@@ -22,3 +24,12 @@ export const uploadRestaurantImages = (
   images: FileWithPath[]
 ): Promise<ApiOk> =>
   upload(`/admin/restaurants/${restuarant.id}/images`, images, session);
+
+export const reservationsForRestaurant = (
+  session: string,
+  restuarantId: number
+): Promise<APIReservationAdmin[]> =>
+  get(`/admin/restaurants/${restuarantId}/reservations`, session);
+
+export const reservationsExport = (session: string, restaurantId: number) =>
+  download(`/admin/restaurants/${restaurantId}/reservations-export`, session);

@@ -9,6 +9,7 @@ import RestaurantPage from "./RestaurantPage";
 import AdminPage from "./AdminPage";
 import NewRestaurantPage from "./NewRestaurantPage";
 import ReservationsPage from "./ReservationsPage";
+import AdminReservationsPage from "./AdminReservationsPage";
 
 export const pagesMap = [
   { path: "/", route: routes.restaurants.list },
@@ -17,8 +18,8 @@ export const pagesMap = [
   { path: "/restaurants/view/:restaurantId", route: routes.restaurants.single },
   { path: "/reservations", route: routes.reservations.list },
   {
-    path: "/reservations/view/:reservationsId",
-    route: routes.reservations.single,
+    path: "/restaurants/reservations/:restaurantId",
+    route: routes.restaurants.reservations,
   },
   { path: "/admin", route: routes.admin },
   { path: "/account", route: routes.account },
@@ -32,8 +33,9 @@ export const Pages = createRoutesView({
     PreferencesPage,
     RestaurantPage,
     NewRestaurantPage,
-    AdminPage,
     ReservationsPage,
+    AdminPage,
+    AdminReservationsPage,
   ],
   otherwise() {
     return (

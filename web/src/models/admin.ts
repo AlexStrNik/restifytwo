@@ -2,6 +2,8 @@ import { attach, createEffect, createEvent, restore } from "effector";
 
 import {
   addRestaurant,
+  reservationsExport,
+  reservationsForRestaurant,
   restaurants,
   uploadRestaurantImages,
 } from "../api/admin";
@@ -47,4 +49,31 @@ export const uploadRestaurantImagesFx = attach({
   }),
 });
 
+const _loadReservationsForRestaurantFx = createEffect(
+  (params: { session: string; restaurantId: number }) =>
+    reservationsForRestaurant(params.session, params.restaurantId)
+);
+export const loadReservationsForRestaurantFx = attach({
+  source: $session,
+  effect: _loadReservationsForRestaurantFx,
+  mapParams: (restaurantId: number, session) => ({
+    restaurantId,
+    session: session as string,
+  }),
+});
+
+const _downloadReservationsForRestaurantFx = createEffect(
+  (params: { session: string; restaurantId: number }) =>
+    reservationsExport(params.session, params.restaurantId)
+);
+export const downloadReservationsForRestaurantFx = attach({
+  source: $session,
+  effect: _downloadReservationsForRestaurantFx,
+  mapParams: (restaurantId: number, session) => ({
+    restaurantId,
+    session: session as string,
+  }),
+});
+
 export const $myRestaurants = restore(loadRestaurantsFx, []);
+export const $reservations = restore(loadReservationsForRestaurantFx, []);

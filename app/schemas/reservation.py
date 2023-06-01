@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -29,7 +28,3 @@ class Reservation(ReservationBase):
 
 class APIReservation(Reservation):
     pass
-
-
-class APIReservationAdmin(Reservation):
-    guest_id: int
