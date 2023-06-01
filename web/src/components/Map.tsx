@@ -1,5 +1,4 @@
-import { Box, Card, Paper } from "@mantine/core";
-import "react";
+import { Paper } from "@mantine/core";
 
 interface MapProps {
   address: string;

@@ -7,7 +7,6 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Icon } from "@tabler/icons-react";
-import React from "react";
 
 const useStyles = createStyles((theme) => {
   const icon = getStylesRef("icon");

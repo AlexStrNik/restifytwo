@@ -2,7 +2,8 @@ from typing import List
 from pydantic import BaseModel
 
 from .image import Image
-from .review import APIReviewLight, Review
+from .schedule import Schedule
+from .review import APIReviewLight
 
 
 class RestaurantBase(BaseModel):
@@ -10,6 +11,7 @@ class RestaurantBase(BaseModel):
     address: str
     about: str
     floor_id: str
+    schedules: List[Schedule]
 
 
 class APIRestaurantCreate(RestaurantBase):

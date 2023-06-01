@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import {
   Input,
   Paper,
@@ -9,11 +10,11 @@ import {
   Collapse,
   LoadingOverlay,
 } from "@mantine/core";
+import { redirect } from "atomic-router";
 import { Calendar } from "@mantine/dates";
 import { useStore } from "effector-react";
 import { createForm, useForm } from "effector-forms";
-import { redirect } from "atomic-router";
-import dayjs from "dayjs";
+import { attach, createEvent, forward, sample } from "effector";
 
 import { routes } from "../shared/routes";
 import Floorplan from "../components/Floorplan";
@@ -23,9 +24,8 @@ import {
   createReservationFx as _createReservationFx,
   loadReservationsForTableFx as _loadReservationsForTableFx,
 } from "../models/restaurants";
-import { attach, createEvent, forward, sample } from "effector";
 import { GuestsInput } from "../components/GuestsInput";
-import { APIReservationCreate, APIRestaurant } from "../api/types";
+import { APIReservationCreate, APIRestaurant, Schedule } from "../api/types";
 
 const reservationForm = createForm({
   fields: {
@@ -116,6 +116,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ restaurant }) => {
   const reservationsLoading = useStore(loadReservationsForTableFx.pending);
   const { fields, eachValid } = useForm(reservationForm);
 
+  const schedules: Record<number, Schedule> = restaurant.schedules.reduce(
+    (schedules, schedule) => ({
+      ...schedules,
+      [schedule.day_of_week]: schedule,
+    }),
+    {}
+  );
+
   return (
     <Stack align="stretch">
       <Floorplan
@@ -169,21 +177,32 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ restaurant }) => {
                   .map((i) =>
                     dayjs(fields.date.value).startOf("day").add(i, "hour")
                   )
-                  .map((time) => (
-                    <Button
-                      key={time.toString()}
-                      style={{ flexGrow: 1 }}
-                      variant={
-                        time.isSame(fields.date.value) ? "filled" : "default"
-                      }
-                      disabled={reservedDates?.some((reservation) =>
-                        dayjs(reservation.date).isSame(time)
-                      )}
-                      onClick={() => fields.date.onChange(time.toDate())}
-                    >
-                      {time.format("HH:mm")}
-                    </Button>
-                  ))}
+                  .map((time) => {
+                    const schedule = schedules[fields.date.value.getDay()] || {
+                      opens_at: 0,
+                      closes_at: 23,
+                    };
+
+                    return (
+                      <Button
+                        key={time.toString()}
+                        style={{ flexGrow: 1 }}
+                        variant={
+                          time.isSame(fields.date.value) ? "filled" : "default"
+                        }
+                        disabled={
+                          reservedDates?.some((reservation) =>
+                            dayjs(reservation.date).isSame(time)
+                          ) ||
+                          time.hour() < schedule.opens_at ||
+                          time.hour() > schedule.closes_at
+                        }
+                        onClick={() => fields.date.onChange(time.toDate())}
+                      >
+                        {time.format("HH:mm")}
+                      </Button>
+                    );
+                  })}
               </Flex>
             </Input.Wrapper>
             <Input.Wrapper labelElement="div" label={"Enter guests count"}>

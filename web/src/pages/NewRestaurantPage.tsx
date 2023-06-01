@@ -21,10 +21,12 @@ import Floorplan from "../components/Floorplan";
 import { APIRestaurantCreate, FileWithPath } from "../api/types";
 import ImageInput from "../components/ImageInput";
 import AddressInput from "../components/AddressInput";
+import ScheduleForm, { PartialSchedule } from "../forms/ScheduleForm";
 
-type FormFields = Omit<APIRestaurantCreate, "floor_id"> & {
+type FormFields = Omit<APIRestaurantCreate, "floor_id" | "schedules"> & {
   floor_id: string | null;
   images: FileWithPath[];
+  schedules: PartialSchedule[];
 };
 
 const restaurantForm = createForm<FormFields>({
@@ -61,6 +63,21 @@ const restaurantForm = createForm<FormFields>({
     },
     about: {
       init: "",
+    },
+    schedules: {
+      init: [],
+      rules: [
+        {
+          name: "valid",
+          validator: (schedules: PartialSchedule[]) =>
+            schedules.every(
+              (schedule) =>
+                schedule.day_of_week != null &&
+                schedule.opens_at != null &&
+                schedule.closes_at != null
+            ),
+        },
+      ],
     },
   },
   validateOn: ["change"],
@@ -102,7 +119,9 @@ export const NewRestaurantPage = () => {
     <ScrollArea p="lg" maw={700}>
       <Stack>
         <LoadingOverlay visible={loading} overlayBlur={2} />
+
         <Title order={1}>New restaurant</Title>
+
         <TextInput
           name="name"
           placeholder="Restaurant name"
@@ -145,6 +164,7 @@ export const NewRestaurantPage = () => {
             value: floor.id,
           }))}
         />
+
         {fields.floor_id.value && (
           <div style={{ pointerEvents: "none" }}>
             <Floorplan
@@ -153,6 +173,7 @@ export const NewRestaurantPage = () => {
             />
           </div>
         )}
+
         <Textarea
           autosize
           name="about"
@@ -160,6 +181,11 @@ export const NewRestaurantPage = () => {
           label="Description"
           value={fields.about.value}
           onChange={(e) => fields.about.onChange(e.target.value)}
+        />
+
+        <ScheduleForm
+          value={fields.schedules.value}
+          onChange={fields.schedules.onChange}
         />
 
         <Button

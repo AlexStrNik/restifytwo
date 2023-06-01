@@ -32,6 +32,13 @@ export interface APIRestaurant {
   address: string;
   floor_id: string;
   archilogic_token: string;
+  schedules: Schedule[];
+}
+
+export interface Schedule {
+  day_of_week: number;
+  opens_at: number;
+  closes_at: number;
 }
 
 export interface APIRestaurantImage {
@@ -49,6 +56,7 @@ export interface APIRestaurantCreate {
   about: string;
   floor_id: string;
   address: string;
+  schedules: Schedule[];
 }
 
 export interface APIUserUpdate
