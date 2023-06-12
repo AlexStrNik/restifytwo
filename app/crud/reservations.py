@@ -6,6 +6,9 @@ from ..models.reservation import Reservation
 from ..schemas.reservation import ReservationCreate
 from ..schemas.admin import ReservationAdmin
 
+def get_reservation(db: Session, by_id: int) -> ReservationAdmin:
+    return db.query(Reservation).get(by_id)
+
 def get_reservations(db: Session, for_user: int = None, for_restaurant: int = None, for_table: str = None) -> List[ReservationAdmin]:
     query = db.query(Reservation)
     
@@ -31,3 +34,7 @@ def create_reservation(db: Session, reservation: ReservationCreate) -> Reservati
     db.refresh(db_reservation)
 
     return db_reservation
+
+def delete_reservation(db: Session, reservation: ReservationAdmin):
+    db.query(Reservation).filter(Reservation.id == reservation.id).delete()
+    db.commit()

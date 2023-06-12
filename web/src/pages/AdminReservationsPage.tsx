@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Group,
+  LoadingOverlay,
   Paper,
   Stack,
   Text,
@@ -29,6 +30,9 @@ import {
   downloadReservationsForRestaurantFx,
   loadReservationsForRestaurantFx,
 } from "../models/admin";
+import { deleteReservationFx } from "../models/reservations";
+import { forward } from "effector";
+import { sample } from "effector";
 
 const useStyles = createStyles(() => {
   return {
@@ -46,6 +50,8 @@ const AdminReservationsPage = () => {
 
   const restaurantId = useStore(route.$params).restaurantId;
 
+  const deleteInProgress = useStore(deleteReservationFx.pending);
+  const loadingInProgress = useStore(loadReservationsForRestaurantFx.pending);
   const downloadInProgress = useStore(
     downloadReservationsForRestaurantFx.pending
   );
@@ -82,12 +88,16 @@ const AdminReservationsPage = () => {
           <IconUsers size={theme.fontSizes.md} /> Guests:{" "}
           {reservation.guests_count}
         </Text>
+        <Button mt="xl" onClick={() => deleteReservationFx(reservation.id)}>
+          Delete reservation
+        </Button>
       </Paper>
     )
   );
 
   return (
     <Stack p="lg">
+      <LoadingOverlay visible={deleteInProgress || loadingInProgress} />
       <Group position="apart" mt="md" mb="xs">
         <Title order={1}>Reservations</Title>
         <Button
@@ -114,6 +124,13 @@ const route = chainRoute({
     effect: loadReservationsForRestaurantFx,
     mapParams: ({ params }) => params.restaurantId,
   },
+});
+
+sample({
+  clock: deleteReservationFx.done,
+  source: route.$params,
+  fn: (src, _) => src.restaurantId,
+  target: loadReservationsForRestaurantFx,
 });
 
 export default {

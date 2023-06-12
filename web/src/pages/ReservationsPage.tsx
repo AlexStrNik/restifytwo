@@ -1,10 +1,12 @@
 import dayjs from "dayjs";
 import { Link } from "atomic-router-react";
 import { chainRoute } from "atomic-router";
-import { useList } from "effector-react";
+import { useList, useStore } from "effector-react";
 import {
   Badge,
+  Button,
   Group,
+  LoadingOverlay,
   Paper,
   Stack,
   Text,
@@ -14,10 +16,15 @@ import {
 } from "@mantine/core";
 import { IconLink, IconUsers } from "@tabler/icons-react";
 
-import { $myReservations, loadMyReservationsFx } from "../models/reservations";
+import {
+  $myReservations,
+  deleteReservationFx,
+  loadMyReservationsFx,
+} from "../models/reservations";
 import { APIReservation } from "../api/types";
 import { routes } from "../shared/routes";
 import { authorized } from "../models/session";
+import { forward } from "effector";
 
 const useStyles = createStyles((theme) => {
   return {
@@ -29,9 +36,17 @@ const useStyles = createStyles((theme) => {
   };
 });
 
+forward({
+  from: deleteReservationFx.done,
+  to: loadMyReservationsFx,
+});
+
 const ReservationsPage = () => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
+
+  const deleteInProgress = useStore(deleteReservationFx.pending);
+  const loadingInProgress = useStore(loadMyReservationsFx.pending);
 
   const reservations = useList(
     $myReservations,
@@ -53,12 +68,16 @@ const ReservationsPage = () => {
           <IconUsers size={theme.fontSizes.md} /> Guests:{" "}
           {reservation.guests_count}
         </Text>
+        <Button mt="xl" onClick={() => deleteReservationFx(reservation.id)}>
+          Delete reservation
+        </Button>
       </Paper>
     )
   );
 
   return (
     <Stack p="lg">
+      <LoadingOverlay visible={deleteInProgress || loadingInProgress} />
       <Title order={1}>Reservations</Title>
       <Stack maw={700} spacing="lg">
         {reservations}

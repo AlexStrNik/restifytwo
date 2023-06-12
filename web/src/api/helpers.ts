@@ -115,3 +115,24 @@ export const get = <T0>(
     })
   );
 };
+
+export const delete_ = <T0>(
+  pathComponent: string,
+  session?: string
+): Promise<T0> => {
+  return delayed(
+    fetch(`${API_URL}${pathComponent}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session}`,
+      },
+    }).then(async (res) => {
+      if (res.status !== 200) {
+        throw await res.json();
+      }
+      return await res.json();
+    })
+  );
+};
